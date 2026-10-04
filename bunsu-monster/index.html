@@ -1,0 +1,1558 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ぶんすうモンスター</title>
+<meta name="description" content="小学5年生の分数の問題に正解して、モンスターをつかまえよう！">
+<meta name="theme-color" content="#f5f9f7">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Yusei+Magic&family=Zen+Maru+Gothic:wght@500;700;900&display=swap">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;padding:0}
+img{max-width:100%}
+[hidden]:not([hidden=until-found i]){display:none!important}
+:root{
+  /* Layout: 1カラム。方眼ノートの上に、場面と問題カードを貼りつけたような構成 */
+  --paper:#f5f9f7; --grid:#d5e7e2; --grid-dark:#b9d3cc;
+  --ink:#1d2433; --muted:#566176; --card:#ffffff; --card-2:#eef5ff;
+  --red:#e03a3e; --marker:#ffe14d; --marker-2:#fff3a8; --ok:#2b9348; --mid:#e89a00; --info:#2f7fd1;
+  --font-display:'Dela Gothic One','Hiragino Sans','Yu Gothic',sans-serif;
+  --font-body:'Zen Maru Gothic','Hiragino Maru Gothic ProN','BIZ UDPGothic','Yu Gothic','Meiryo',sans-serif;
+  --font-hand:'Yusei Magic','Zen Maru Gothic','Hiragino Maru Gothic ProN',sans-serif;
+  color-scheme:light;
+}
+html,body{background-color:var(--paper)}
+body{color:var(--ink);font-family:var(--font-body);font-weight:500;font-size:16px;line-height:1.6;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:22px 22px;-webkit-tap-highlight-color:transparent}
+.app{max-width:760px;margin:0 auto;padding-inline:16px;padding-block:18px 48px}
+button{font:inherit;color:inherit}
+h1,h2,h3{text-wrap:balance}
+
+.btn{font-family:var(--font-body);font-weight:900;font-size:1rem;border:3px solid var(--ink);border-radius:14px;background:var(--card);color:var(--ink);
+  padding:.6em 1.1em;box-shadow:0 4px 0 var(--ink);cursor:pointer;transition:transform .08s,box-shadow .08s;line-height:1.3}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.btn.primary{background:var(--marker)}
+.btn.small{font-size:.88rem;padding:.4em .8em;border-radius:12px;box-shadow:0 3px 0 var(--ink)}
+.btn:focus-visible,.choice:focus-visible,.zk-card:focus-visible,.hint-btn:focus-visible,.link-btn:focus-visible{outline:3px solid var(--info);outline-offset:3px}
+
+/* ---------- ホーム ---------- */
+.top-link{display:inline-block;font-weight:700;font-size:.85rem;color:var(--muted);padding:2px 4px}
+.top-link:focus-visible{outline:3px solid var(--info);outline-offset:3px}
+.home-head{display:grid;justify-items:center;text-align:center;gap:10px;padding-block:6px 4px}
+.logo{margin:0;display:inline-flex;flex-direction:column;align-items:center;font-family:var(--font-display);font-weight:400;line-height:1.05;letter-spacing:.04em;color:var(--ink)}
+.logo .ln{font-size:clamp(1.9rem,8vw,2.9rem);padding:0 .3em .1em}
+.logo .ld{font-size:clamp(2.3rem,10vw,3.7rem);padding:.12em .2em 0;border-top:.12em solid var(--red)}
+.tagline{margin:0;font-weight:700;max-width:30em}
+.audio-note{margin:0;font-size:.82rem;font-weight:700;color:var(--muted)}
+.music-btn{flex-shrink:0;padding:.3em .65em;font-size:1rem}
+.music-btn[aria-pressed="false"]{text-decoration:line-through;background:var(--card-2);color:var(--muted)}
+.home-bar{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;align-items:center}
+.sec-title{font-family:var(--font-display);font-weight:400;font-size:1.3rem;margin:24px 0 10px}
+.areas{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:16px}
+.area{background:var(--card);border:3px solid var(--ink);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 5px 0 var(--ink)}
+.area-art{position:relative;height:118px;border-bottom:3px solid var(--ink);overflow:hidden}
+.area-art svg.decor-svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.area.locked .area-art svg.decor-svg{filter:grayscale(.9) brightness(.75)}
+.lock-tag{position:absolute;inset:0;display:grid;place-items:center}
+.lock-tag span{display:inline-flex;align-items:center;gap:6px;background:var(--card);border:3px solid var(--ink);border-radius:999px;padding:.2em .9em;font-weight:900}
+.lock-tag svg{width:20px;height:20px}
+.area-body{padding:12px 14px 14px;display:grid;gap:8px;flex:1}
+.area-name{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-weight:900;font-size:1.15rem;margin:0}
+.lv{font-size:.75rem;font-weight:900;padding:.1em .65em;border-radius:999px;border:2px solid var(--ink);background:var(--marker-2)}
+.lv[data-lv="2"]{background:#cfe9ff}.lv[data-lv="3"]{background:#ffd3c2}.lv[data-lv="4"]{background:#e3dcff}
+.area-topics{margin:0;font-size:.85rem;color:var(--muted);font-weight:700}
+.area-mons{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.mini{width:42px;height:42px;border-radius:10px;border:2px solid var(--ink);background:var(--card-2);display:grid;place-items:center;font-weight:900;color:var(--muted)}
+.mini svg{width:36px;height:36px}
+.area-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.got{font-weight:900;font-size:.9rem;font-variant-numeric:tabular-nums}
+.lock-note{font-size:.82rem;font-weight:700;color:var(--muted)}
+.howto{margin-top:26px;background:var(--card);border:3px solid var(--ink);border-radius:20px;padding:14px 16px}
+.howto h2{margin:0 0 8px;font-family:var(--font-display);font-weight:400;font-size:1.15rem}
+.howto ol{margin:0;padding-left:1.4em;display:grid;gap:4px;font-weight:700}
+.howto ol li::marker{color:var(--red);font-weight:900}
+.parent{margin:12px 0 0;font-size:.82rem;color:var(--muted);line-height:1.7}
+
+/* ---------- バトル ---------- */
+.bt-top{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.bt-top .btn{white-space:nowrap;flex-shrink:0}
+.area-chip{font-weight:900;font-size:.92rem;background:var(--card);border:2px solid var(--ink);border-radius:999px;padding:.2em .8em;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hearts{margin-left:auto;display:flex;gap:3px;flex-shrink:0}
+.hearts svg{width:28px;height:28px;display:block}
+.hearts .lost{animation:heartlost .5s}
+@keyframes heartlost{40%{transform:scale(1.35)}}
+.scene{position:relative;height:clamp(200px,36vh,270px);border:3px solid var(--ink);border-radius:20px;overflow:hidden;background:#c6ecff}
+.scene .decor{position:absolute;inset:0}
+.scene .decor svg{width:100%;height:100%;display:block}
+.pad{position:absolute;left:50%;bottom:8%;width:min(54%,260px);height:17%;transform:translateX(-50%);border-radius:50%;background:var(--pad,#79c257);border:3px solid var(--ink)}
+.mon{position:absolute;left:50%;bottom:14%;width:min(44%,190px);aspect-ratio:1;max-width:100%;transform:translateX(-50%);transition:transform .5s ease-in,opacity .5s,filter .3s}
+.mon-inner{width:100%;height:100%;animation:bob 2.6s ease-in-out infinite}
+.mon svg{width:100%;height:100%;display:block;overflow:visible}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4%)}}
+.mon.appear{animation:appear .6s cubic-bezier(.2,1.4,.4,1)}
+@keyframes appear{from{transform:translateX(-50%) scale(.1);opacity:0;filter:brightness(3)}to{transform:translateX(-50%) scale(1);opacity:1;filter:none}}
+.mon-inner.hop{animation:hop .45s ease-out}
+@keyframes hop{0%,100%{transform:translateY(0)}40%{transform:translateY(-14%)}}
+.mon-inner.shake{animation:shake .45s}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6%)}40%{transform:translateX(6%)}60%{transform:translateX(-4%)}80%{transform:translateX(4%)}}
+.mon.suck{transform:translateX(-50%) translateY(12%) scale(.04);opacity:0;filter:brightness(3)}
+.mon.flee{transform:translateX(220%) translateY(-10%);opacity:0;transition:transform .8s ease-in,opacity .8s}
+.name-tag{position:absolute;top:10px;left:10px;max-width:calc(100% - 20px);background:var(--card);border:2px solid var(--ink);border-radius:12px;padding:.15em .7em;font-weight:900;font-size:.95rem}
+.name-tag small{font-weight:900;color:#c99400;margin-left:.4em;letter-spacing:.05em}
+.jar{position:absolute;left:50%;bottom:15%;width:64px;transform:translateX(-50%);transform-origin:50% 100%}
+.jar svg{width:100%;display:block}
+.jar.throw{animation:throw .7s cubic-bezier(.3,.7,.4,1) both}
+@keyframes throw{0%{transform:translateX(-50%) translate(-180px,170px) rotate(-60deg) scale(.7)}55%{transform:translateX(-50%) translate(-60px,-110px) rotate(200deg) scale(1)}100%{transform:translateX(-50%) rotate(360deg)}}
+.jar.wobble{animation:wobble .5s ease-in-out}
+@keyframes wobble{0%,100%{transform:translateX(-50%) rotate(0)}25%{transform:translateX(-50%) rotate(-18deg)}75%{transform:translateX(-50%) rotate(18deg)}}
+.jar.glow svg{filter:drop-shadow(0 0 10px #fff6a0) drop-shadow(0 0 4px #ffd400)}
+.burst{position:absolute;left:50%;bottom:28%;width:0;height:0;pointer-events:none}
+.burst i{position:absolute;width:22px;height:22px;margin:-11px;animation:spark .9s ease-out forwards}
+.burst i svg{width:100%;height:100%;display:block}
+@keyframes spark{from{transform:translate(0,0) scale(.3);opacity:1}to{transform:translate(var(--dx),var(--dy)) scale(1.1);opacity:0}}
+.gauge-row{display:flex;align-items:center;gap:10px;margin:10px 2px 0}
+.gauge-label{font-weight:900;font-size:.85rem;white-space:nowrap}
+.gauge{display:flex;gap:6px;flex:1}
+.seg{flex:1;height:18px;border:2.5px solid var(--ink);border-radius:8px;background:var(--card);transition:background .3s}
+.seg.on{background:var(--marker)}
+.seg.pop{animation:segpop .45s}
+@keyframes segpop{50%{transform:scaleY(1.5)}}
+.msg{margin:10px 0 0;background:var(--card);border:3px solid var(--ink);border-radius:14px;padding:.5em .9em;font-weight:900;min-height:2.9em;display:flex;align-items:center}
+.qcard{position:relative;margin-top:12px;background:var(--card);border:3px solid var(--ink);border-radius:20px;padding:14px 14px 16px;box-shadow:0 5px 0 var(--ink);transition:opacity .3s}
+.qcard.dim{opacity:.45}
+.q-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.topic{font-size:.8rem;font-weight:900;background:var(--ink);color:#fff;border-radius:999px;padding:.2em .85em}
+.hint-btn{font-weight:900;font-size:.85rem;border:2px dashed var(--ink);background:var(--card);color:var(--ink);border-radius:10px;padding:.25em .75em;cursor:pointer}
+.q-hint{margin:8px 0 0;background:var(--marker-2);border-radius:10px;padding:.45em .8em;font-weight:700;font-size:.92rem;line-height:1.9}
+.q-label{margin:8px 0 2px;text-align:center;font-weight:900;color:var(--muted)}
+.q-expr{font-weight:900;font-size:clamp(1.9rem,7vw,2.5rem);padding:4px 0 12px;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;min-height:2.6em}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.choices.three{grid-template-columns:repeat(3,1fr)}
+.choices.wide{grid-template-columns:1fr}
+.choice{position:relative;min-height:80px;border:3px solid var(--ink);border-radius:16px;background:var(--card-2);color:var(--ink);box-shadow:0 4px 0 var(--ink);font-weight:900;
+  font-size:clamp(1.3rem,5vw,1.7rem);display:flex;align-items:center;justify-content:center;flex-wrap:wrap;cursor:pointer;padding:8px 6px;transition:transform .08s,box-shadow .08s,background .2s}
+.choice:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.choice .kbd{position:absolute;top:3px;left:8px;font-size:.68rem;color:var(--muted);font-weight:700}
+.choice.correct{background:#d6f5dc}
+.choice.wrong{background:#ffdfe0}
+.choice.reveal{background:#d6f5dc;outline:3px dashed var(--ok);outline-offset:3px}
+.choice[disabled]{cursor:default}
+.choice[disabled]:active{transform:none;box-shadow:0 4px 0 var(--ink)}
+.choices.three .choice{font-size:clamp(1.15rem,4.6vw,1.6rem)}
+.stamp{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none}
+.stamp-inner{display:grid;justify-items:center;transform:rotate(-8deg)}
+.stamp svg{width:min(50vw,190px);height:auto;display:block}
+.stamp svg path{stroke:var(--red);stroke-width:6;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;animation:draw .55s ease-out forwards}
+.stamp svg path.petal{animation-delay:.2s;animation-duration:.6s}
+.stamp b{font-family:var(--font-hand);font-weight:400;color:var(--red);font-size:2.3rem;margin-top:-30px;background:rgba(255,255,255,.9);padding:0 .35em;border-radius:10px;line-height:1.3}
+@keyframes draw{to{stroke-dashoffset:0}}
+.explain{margin-top:16px;border-top:3px dashed var(--grid-dark);padding-top:12px}
+.ex-title{margin:0 0 8px;font-family:var(--font-hand);font-size:1.45rem;color:var(--red);display:flex;align-items:center;gap:.4em;flex-wrap:wrap}
+.ex-title .ans{font-family:var(--font-body);font-weight:900;color:var(--ink);font-size:1.45rem;background:var(--marker-2);padding:0 .35em;border-radius:8px;display:inline-flex;align-items:center}
+.ex-steps{margin:0 0 14px;padding-left:1.6em;display:grid;gap:2px;font-weight:700;line-height:2.4}
+.ex-steps li::marker{font-weight:900;color:var(--red)}
+.ex-steps .frac{font-size:1.05em}
+.explain .btn{width:100%}
+
+/* 分数の表示 */
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.05;margin:0 .1em;font-variant-numeric:tabular-nums}
+.frac .fn{padding:0 .18em .06em;border-bottom:.085em solid currentColor;min-width:1.1em;text-align:center}
+.frac .fd{padding:.06em .18em 0;text-align:center}
+.mixed{display:inline-flex;align-items:center}
+.mixed .mw{margin-right:.02em}
+.int{font-variant-numeric:tabular-nums}
+.box{display:inline-block;width:1.05em;height:1.05em;border:.08em solid currentColor;border-radius:.14em;background:var(--marker-2);vertical-align:middle}
+.op{margin:0 .28em}
+.and{font-size:.58em;margin:0 .45em}
+
+/* ---------- モーダル ---------- */
+.modal{position:fixed;inset:0;background:rgba(29,36,51,.55);display:flex;justify-content:center;align-items:center;padding:16px;z-index:20}
+.modal-card{width:100%;max-width:420px;min-width:0;max-height:calc(100vh - 32px);overflow:auto;background:var(--card);border:3px solid var(--ink);border-radius:22px;box-shadow:0 6px 0 var(--ink);
+  padding:18px;text-align:center;display:grid;gap:8px;justify-items:center;animation:pop .35s cubic-bezier(.2,1.4,.4,1)}
+@keyframes pop{from{transform:scale(.8);opacity:0}}
+.big-mon{width:170px;height:170px}
+.big-mon svg{width:100%;height:100%;display:block}
+.get-title{font-family:var(--font-hand);color:var(--red);font-size:2.5rem;margin:0;line-height:1.1}
+.get-title.sad{color:var(--info)}
+.new-badge{font-weight:900;font-size:.8rem;background:var(--red);color:#fff;border-radius:999px;padding:.15em .8em}
+.mon-no{font-weight:900;color:var(--muted);font-size:.85rem;font-variant-numeric:tabular-nums}
+.mon-name{font-family:var(--font-display);font-weight:400;font-size:1.7rem;margin:0;line-height:1.2}
+.chips{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center}
+.type-chip{font-weight:900;font-size:.8rem;border-radius:999px;padding:.12em .8em;border:2px solid var(--ink);color:#fff;background:var(--tc,#888)}
+.type-chip.dark{color:var(--ink)}
+.rare{color:#c99400;letter-spacing:.08em;font-weight:900}
+.mon-desc{margin:0;font-weight:700;font-size:.95rem;text-align:left;background:var(--card-2);border-radius:12px;padding:.6em .85em;line-height:1.75;width:100%}
+.mon-meta{margin:0;font-size:.85rem;font-weight:700;color:var(--muted)}
+.notice{margin:0;font-weight:900;background:var(--marker-2);border:2px solid var(--ink);border-radius:12px;padding:.4em .8em;width:100%}
+.modal-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;width:100%;margin-top:6px}
+.modal-actions .btn{flex:1 1 140px}
+
+/* ---------- ずかん ---------- */
+.zk-top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.zk-top h2{font-family:var(--font-display);font-weight:400;font-size:1.4rem;margin:0}
+.zk-count{margin-left:auto;font-weight:900;background:var(--marker);border:2px solid var(--ink);border-radius:999px;padding:.1em .9em;font-variant-numeric:tabular-nums}
+.zk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,132px),1fr));gap:12px}
+.zk-card{background:var(--card);border:3px solid var(--ink);border-radius:16px;padding:8px 8px 10px;display:grid;justify-items:center;align-content:start;gap:2px;cursor:pointer;box-shadow:0 4px 0 var(--ink);text-align:center;color:var(--ink)}
+.zk-card:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.zk-card svg{width:88px;height:88px;display:block}
+.zk-card .no{font-size:.75rem;font-weight:900;color:var(--muted);justify-self:start;font-variant-numeric:tabular-nums}
+.zk-card .nm{font-weight:900;font-size:.95rem}
+.zk-card .ct{font-size:.75rem;font-weight:700;color:var(--muted)}
+.zk-card.unknown{background:var(--card-2);cursor:default;box-shadow:none;border-style:dashed}
+.zk-card.unknown:active{transform:none}
+.q-mark{width:88px;height:88px;display:grid;place-items:center;font-family:var(--font-display);font-size:2.4rem;color:var(--grid-dark)}
+.sil svg{filter:brightness(0);opacity:.22}
+.records{margin-top:24px;background:var(--card);border:3px solid var(--ink);border-radius:20px;padding:14px 16px}
+.records h3{margin:0 0 6px;font-family:var(--font-display);font-weight:400;font-size:1.15rem}
+.rec-total{font-weight:900;margin:0 0 10px}
+.rec-row{display:grid;grid-template-columns:8.6em 1fr 4.2em;gap:10px;align-items:center;font-size:.88rem;font-weight:700;padding:3px 0}
+.rec-bar{height:12px;border:2px solid var(--ink);border-radius:6px;background:var(--card-2);overflow:hidden}
+.rec-bar i{display:block;height:100%;background:var(--ok)}
+.rec-bar i.low{background:var(--red)}
+.rec-bar i.mid{background:var(--mid)}
+.rec-num{text-align:right;font-variant-numeric:tabular-nums}
+.reset{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-weight:700;font-size:.9rem}
+.link-btn{background:none;border:none;color:var(--muted);text-decoration:underline;font-weight:700;cursor:pointer;font-size:.85rem;padding:4px}
+
+@media (max-width:420px){
+  .choice{min-height:70px}
+  .hearts svg{width:24px;height:24px}
+  .rec-row{grid-template-columns:7.6em 1fr 3.8em;gap:8px}
+}
+@media (prefers-reduced-motion:reduce){
+  .mon-inner{animation:none}
+  .mon.appear,.jar.throw,.jar.wobble,.mon-inner.hop,.mon-inner.shake,.seg.pop,.modal-card,.burst i{animation-duration:.01s}
+  .stamp svg path{animation-duration:.01s;animation-delay:0s}
+  .mon,.mon.flee{transition-duration:.01s}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- ホーム -->
+  <section id="scr-home" class="screen">
+    <a class="top-link" href="../index.html">← まなびクエスト</a>
+    <header class="home-head">
+      <h1 class="logo" aria-label="ぶんすうモンスター"><span class="ln">ぶんすう</span><span class="ld">モンスター</span></h1>
+      <p class="tagline">分数の もんだいに せいかいして、モンスターを つかまえよう！</p>
+      <div class="home-bar">
+        <button class="btn primary" id="btn-zukan">ずかんを 見る <span id="zukan-count">0/13</span></button>
+        <button class="btn small" id="btn-bgm" aria-pressed="true">BGM：ON</button>
+        <button class="btn small" id="btn-sound" aria-pressed="true">効果音：ON</button>
+      </div>
+      <p class="audio-note" id="audio-note">画面を タップすると BGMが はじまるよ</p>
+    </header>
+    <h2 class="sec-title">どこへ いく？</h2>
+    <div class="areas" id="areas"></div>
+    <section class="howto">
+      <h2>あそびかた</h2>
+      <ol>
+        <li>いきたい ばしょを えらんで「ここで さがす」を おす</li>
+        <li>モンスターが でてきたら、分数の もんだいに こたえる</li>
+        <li>せいかいすると ゲットゲージが たまる。いっぱいに なったら ゲット！</li>
+        <li>3かい まちがえると にげられちゃう。まちがえたら とき方を 見て おぼえよう</li>
+      </ol>
+      <p class="parent">おうちの方へ：小学5年生で習う分数（等しい分数・約分・わり算と分数・通分・大小くらべ・分母がちがう分数のたし算とひき算・帯分数の計算・分数と小数・3つの分数の計算）を出題します。問題は毎回ランダムに作られ、まちがえると解き方が表示されます。ずかんと記録はこのブラウザに保存されます。BGMと効果音はボタンでON・OFFできます（iPhone・iPadはマナーモードだと音が出ないことがあります）。</p>
+    </section>
+  </section>
+
+  <!-- バトル -->
+  <section id="scr-battle" class="screen" hidden>
+    <div class="bt-top">
+      <button class="btn small" id="btn-leave">← マップ</button>
+      <span class="area-chip" id="bt-area"></span>
+      <div class="hearts" id="bt-hearts" role="img" aria-label="のこりチャンス"></div>
+      <button class="btn small music-btn" id="btn-bgm-b" aria-pressed="true" aria-label="BGMを とめる">♪</button>
+    </div>
+    <div class="scene" id="scene">
+      <div class="decor" id="scene-decor"></div>
+      <div class="pad"></div>
+      <div class="mon" id="bt-mon"><div class="mon-inner" id="bt-mon-inner"></div></div>
+      <div class="jar" id="bt-jar" hidden></div>
+      <div class="burst" id="bt-burst"></div>
+      <div class="name-tag" id="bt-name"></div>
+    </div>
+    <div class="gauge-row"><span class="gauge-label">ゲットまで</span><div class="gauge" id="bt-gauge"></div></div>
+    <p class="msg" id="bt-msg" aria-live="polite"></p>
+    <div class="qcard" id="qcard">
+      <div class="q-head"><span class="topic" id="q-topic"></span><button class="hint-btn" id="q-hint-btn">ヒント</button></div>
+      <p class="q-hint" id="q-hint" hidden></p>
+      <p class="q-label" id="q-label"></p>
+      <div class="q-expr" id="q-expr"></div>
+      <div class="choices" id="q-choices"></div>
+      <div class="stamp" id="q-stamp" hidden></div>
+      <div class="explain" id="q-explain" hidden>
+        <p class="ex-title">おしい！ こたえは <span class="ans" id="ex-answer"></span></p>
+        <ol class="ex-steps" id="ex-steps"></ol>
+        <button class="btn primary" id="ex-next">わかった！ つぎの もんだい</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ずかん -->
+  <section id="scr-zukan" class="screen" hidden>
+    <div class="zk-top">
+      <button class="btn small" id="btn-zk-back">← もどる</button>
+      <h2>モンスターずかん</h2>
+      <span class="zk-count" id="zk-count"></span>
+    </div>
+    <div class="zk-grid" id="zk-grid"></div>
+    <section class="records">
+      <h3>きろく</h3>
+      <p class="rec-total" id="rec-total"></p>
+      <div id="rec-list"></div>
+      <div class="reset" id="reset-box"></div>
+    </section>
+  </section>
+</div>
+
+<div class="modal" id="modal" hidden><div class="modal-card" id="modal-card" role="dialog" aria-modal="true"></div></div>
+<script>
+// ===== 分数ユーティリティ =====
+const R = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = a => a[Math.floor(Math.random() * a.length)];
+function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+const gcd = (a, b) => { a = Math.abs(a); b = Math.abs(b); while (b) { [a, b] = [b, a % b]; } return a; };
+const lcm = (a, b) => a / gcd(a, b) * b;
+const red = (n, d) => { const g = gcd(n, d); return [n / g, d / g]; };
+const MINUS = '−';
+const F = (n, d) => `<span class="frac"><span class="fn">${n}</span><span class="fd">${d}</span></span>`;
+const M = (w, n, d) => w > 0 ? `<span class="mixed"><span class="mw">${w}</span>${F(n, d)}</span>` : F(n, d);
+const I = x => `<span class="int">${x}</span>`;
+const BOX = '<span class="box"></span>';
+const FMX = (n, d) => { if (d === 1) return I(n); const w = Math.floor(n / d), r = n % d; return r === 0 ? I(w) : M(w, r, d); };
+const vk = v => Array.isArray(v) ? red(v[0], v[1]).join('/') : String(v);
+const fmtDec = x => String(parseFloat(x.toFixed(6)));
+const decPlaces = s => (s.split('.')[1] || '').length;
+const coprimeNum = d => { let n; do { n = R(1, d - 1); } while (gcd(n, d) !== 1); return n; };
+
+// ---- 選択肢の候補 ----
+function cF(n, d, opt = {}) {
+  if (!Number.isInteger(n) || !Number.isInteger(d) || n <= 0 || d <= 1 || n % d === 0) return null;
+  return { html: opt.mixed ? FMX(n, d) : F(n, d), key: 'f' + n + '/' + d, val: [n, d], eq: !!opt.eq };
+}
+const cI = x => (Number.isInteger(x) && x > 0) ? { html: I(x), key: 'i' + x, val: [x, 1] } : null;
+const cN = x => (Number.isInteger(x) && x > 0) ? { html: I(x), key: 'n' + x, val: x } : null;
+function cD(x) {
+  if (!(x > 0)) return null;
+  const s = fmtDec(x);
+  if (decPlaces(s) > 3) return null;
+  return { html: I(s), key: 'd' + s, val: s };
+}
+// 正解に近い分数をランダムにつくる（選択肢の補充用）
+const fracFill = (n, d, mixed) => () => {
+  let a = n, b = d;
+  const t = R(0, 3);
+  if (t === 0) a = n + R(1, 3); else if (t === 1) a = n - R(1, 3); else if (t === 2) b = d + R(1, 3); else b = d - R(1, 2);
+  if (a <= 0 || b <= 1) return null;
+  const [x, y] = red(a, b);
+  return cF(x, y, { mixed });
+};
+
+// correct: 正解 / primary: よくある間違い（優先） / secondary: その他（シャッフル）
+function makeChoices(correct, primary, secondary, opt = {}) {
+  const n = opt.n || 4;
+  const out = [{ ...correct, ok: true }];
+  const keys = new Set([correct.key]);
+  const cv = vk(correct.val);
+  const vals = new Set([cv]);
+  let eqUsed = 0;
+  const tryAdd = c => {
+    if (!c || out.length >= n || keys.has(c.key)) return;
+    const v = vk(c.val);
+    if (c.eq && v === cv) { if (eqUsed >= 1) return; eqUsed++; }
+    else { if (vals.has(v)) return; vals.add(v); }
+    keys.add(c.key); out.push({ ...c, ok: false });
+  };
+  primary.forEach(tryAdd);
+  shuffle(secondary.slice()).forEach(tryAdd);
+  let guard = 0;
+  while (out.length < n && opt.fill && guard++ < 400) tryAdd(opt.fill());
+  return opt.keepOrder ? out : shuffle(out);
+}
+
+// 通分の式  a/b = (a×m)/(b×m) = A/L
+function convStep(a, b, L) {
+  const m = L / b;
+  if (m === 1) return `${F(a, b)} は そのまま`;
+  return `${F(a, b)} = ${F(`${a}×${m}`, `${b}×${m}`)} = ${F(a * m, L)}`;
+}
+
+// ===== 問題の種類 =====
+const TOPICS = {
+  equiv: '等しい分数', reduce: '約分', divfrac: 'わり算と分数',
+  common: '通分', compare: '大小くらべ', add: 'たし算', sub: 'ひき算',
+  madd: '帯分数のたし算', msub: '帯分数のひき算', decimal: '小数と分数', three: '3つの分数'
+};
+const Q = {};
+
+Q.equiv = () => {
+  let d = R(2, 9), n = R(1, d - 1); [n, d] = red(n, d);
+  const k = R(2, 5), N = n * k, D = d * k;
+  if (Math.random() < 0.6) {
+    const correct = cN(N);
+    return {
+      topic: 'equiv', label: '□に あてはまる 数は？',
+      prompt: `${F(n, d)}<span class="op">=</span>${F(BOX, D)}`,
+      choices: makeChoices(correct, [cN(n + (D - d)), cN(n + k)], [cN(N + 1), cN(N - 1), cN(N + 2), cN(D), cN(N + n)], { fill: () => cN(N + R(-5, 6)) }),
+      steps: [`分母は ${d} → ${D}。${d} × <b>${k}</b> = ${D}`, `分子にも おなじ数 <b>${k}</b> を かける：${n} × ${k} = ${N}`, `${F(n, d)} = ${F(N, D)}`],
+      hint: '分母は 何ばいに なったかな？ 分子も おなじだけ かけよう',
+      meta: { kind: 'num', expect: N }
+    };
+  }
+  const correct = cN(n);
+  return {
+    topic: 'equiv', label: '□に あてはまる 数は？',
+    prompt: `${F(N, D)}<span class="op">=</span>${F(BOX, d)}`,
+    choices: makeChoices(correct, [cN(N - (D - d))], [cN(n + 1), cN(n - 1), cN(N), cN(k), cN(n + 2)], { fill: () => cN(n + R(-3, 6)) }),
+    steps: [`分母は ${D} → ${d}。${D} ÷ <b>${k}</b> = ${d}`, `分子も おなじ数 <b>${k}</b> で わる：${N} ÷ ${k} = ${n}`, `${F(N, D)} = ${F(n, d)}`],
+    hint: '分母を 何で わったかな？ 分子も おなじ数で わろう',
+    meta: { kind: 'num', expect: n }
+  };
+};
+
+Q.reduce = () => {
+  let n, d, k, N, D;
+  do {
+    d = R(2, 9); n = R(1, d - 1); [n, d] = red(n, d);
+    k = pick([2, 3, 4, 4, 5, 6, 6, 8, 9]);
+    N = n * k; D = d * k;
+  } while (D > 60);
+  const partial = [];
+  for (let m = 2; m < k; m++) if (k % m === 0) partial.push(cF(N / m, D / m, { eq: true }));
+  const correct = cF(n, d);
+  const steps = [`${N} と ${D} を どちらも わりきれる いちばん大きい数（最大公約数）は <b>${k}</b>`,
+    `分子と分母を ${k} で わる：${F(`${N}÷${k}`, `${D}÷${k}`)} = ${F(n, d)}`];
+  if (partial.length) steps.push('とちゅうで やめずに、もう われなく なるまで 約分しよう');
+  return {
+    topic: 'reduce', label: '約分すると？',
+    prompt: F(N, D),
+    choices: makeChoices(correct, partial.length ? [pick(partial)] : [], [n > 1 ? cF(d, n) : null, cF(n, D), cF(N, d), cF(n + 1, d), cF(n, d + 1)], { fill: fracFill(n, d) }),
+    steps, hint: `${N} と ${D} を どちらも わりきれる 数を さがそう`,
+    meta: { kind: 'frac', expect: [N, D], reduced: true }
+  };
+};
+
+Q.divfrac = () => {
+  let a, b;
+  do { a = R(1, 9); b = R(2, 9); } while (gcd(a, b) !== 1 || a === b);
+  return {
+    topic: 'divfrac', label: 'わり算の 答えを 分数で あらわすと？',
+    prompt: `${I(a)}<span class="op">÷</span>${I(b)}`,
+    choices: makeChoices(cF(a, b), [cF(b, a)], [cF(a, a + b), a !== 1 ? cF(1, b) : null, cF(a + 1, b), cF(a, b + 1)], { fill: fracFill(a, b) }),
+    steps: ['わり算の 答えは 分数で あらわせる', `<b>わられる数</b>（${a}）が 分子、<b>わる数</b>（${b}）が 分母`, `${a} ÷ ${b} = ${F(a, b)}`],
+    hint: 'わられる数は 分子かな？ 分母かな？',
+    meta: { kind: 'frac', expect: [a, b] }
+  };
+};
+
+Q.common = () => {
+  let b, d, L;
+  do { b = R(2, 10); d = R(2, 10); L = lcm(b, d); } while (b === d || L > 40);
+  const a = coprimeNum(b), c = coprimeNum(d);
+  const A = a * L / b, C = c * L / d;
+  const pair = (x, y) => (Number.isInteger(x) && Number.isInteger(y) && x > 0 && y > 0 && x < L && y < L)
+    ? { html: `${F(x, L)}<span class="and">と</span>${F(y, L)}`, key: `p${x},${y}`, val: `p${x},${y}` } : null;
+  return {
+    topic: 'common', label: '通分すると？', wide: true,
+    prompt: `${F(a, b)}<span class="and">と</span>${F(c, d)}`,
+    choices: makeChoices(pair(A, C), [pair(a, c), pair(a * L / d, c * L / b)], [pair(a + L - b, c + L - d), pair(A + 1, C), pair(A, C + 1), pair(A - 1, C), pair(A, C - 1)],
+      { fill: () => pair(A + R(-2, 2), C + R(-2, 2)) }),
+    steps: [`${b} と ${d} の 最小公倍数は <b>${L}</b>。分母を ${L} に そろえる`, convStep(a, b, L), convStep(c, d, L)],
+    hint: `${b} と ${d} の 最小公倍数を 見つけよう`,
+    meta: { kind: 'pair', expect: [A, C, L], src: [[a, b], [c, d]] }
+  };
+};
+
+Q.compare = () => {
+  let a, b, c, d;
+  const same = Math.random() < 0.15;
+  if (same) {
+    b = R(2, 6); a = coprimeNum(b); const k = R(2, 3); c = a * k; d = b * k;
+  } else {
+    do { b = R(2, 10); d = R(2, 10); a = coprimeNum(b); c = coprimeNum(d); } while (b === d || lcm(b, d) > 40 || a * d === c * b);
+  }
+  if (Math.random() < 0.5) { [a, b, c, d] = [c, d, a, b]; }
+  const L = lcm(b, d), A = a * L / b, C = c * L / d;
+  const opts = [{ html: F(a, b), key: 'L', val: 'L' }, { html: F(c, d), key: 'R', val: 'R' }, { html: 'おなじ', key: 'E', val: 'E' }];
+  const ans = A > C ? 'L' : A < C ? 'R' : 'E';
+  const choices = opts.map(o => ({ ...o, ok: o.key === ans }));
+  const result = A === C ? `どちらも ${F(A, L)} で おなじ 大きさ`
+    : A > C ? `${A} ＞ ${C} だから ${F(a, b)} の ほうが 大きい` : `${A} ＜ ${C} だから ${F(c, d)} の ほうが 大きい`;
+  return {
+    topic: 'compare', label: '大きいのは どっち？',
+    prompt: `${F(a, b)}<span class="and">と</span>${F(c, d)}`,
+    choices, steps: [`分母を ${L} に そろえて くらべる`, convStep(a, b, L), convStep(c, d, L), result],
+    hint: '分母を そろえると くらべやすいよ',
+    meta: { kind: 'cmp', expect: ans, src: [[a, b], [c, d]] }
+  };
+};
+
+function pickTwo(maxDen, maxL) {
+  let b, d, L;
+  do { b = R(2, maxDen); d = R(2, maxDen); L = lcm(b, d); } while (b === d || L > maxL);
+  return { a: coprimeNum(b), b, c: coprimeNum(d), d, L };
+}
+
+Q.add = () => {
+  const { a, b, c, d, L } = pickTwo(12, 36);
+  const A = a * L / b, C = c * L / d, S = A + C;
+  const [sn, sd] = red(S, L);
+  const steps = [`分母を ${L} に そろえる（通分）`, `${F(a, b)} + ${F(c, d)} = ${F(A, L)} + ${F(C, L)}`, `= ${F(S, L)}`];
+  if (S !== sn) steps.push(`約分して ${F(sn, sd)}`);
+  if (sn > sd) steps.push(`（帯分数なら ${FMX(sn, sd)}）`);
+  return {
+    topic: 'add', label: 'けいさんしよう',
+    prompt: `${F(a, b)}<span class="op">+</span>${F(c, d)}`,
+    choices: makeChoices(cF(sn, sd), [cF(a + c, b + d)], [S !== sn ? cF(S, L, { eq: true }) : null, cF(a + c, L), cF(...red(S + 1, L)), cF(...red(S - 1, L))], { fill: fracFill(sn, sd) }),
+    steps, hint: 'まず 分母を そろえよう（通分）',
+    meta: { kind: 'frac', expect: [S, L], reduced: true, src: { op: '+', fr: [[a, b], [c, d]] } }
+  };
+};
+
+Q.sub = () => {
+  let { a, b, c, d, L } = pickTwo(12, 36);
+  if (a * d < c * b) { [a, b, c, d] = [c, d, a, b]; }
+  const A = a * L / b, C = c * L / d, S = A - C;
+  const [sn, sd] = red(S, L);
+  const steps = [`分母を ${L} に そろえる（通分）`, `${F(a, b)} ${MINUS} ${F(c, d)} = ${F(A, L)} ${MINUS} ${F(C, L)}`, `= ${F(S, L)}`];
+  if (S !== sn) steps.push(`約分して ${F(sn, sd)}`);
+  return {
+    topic: 'sub', label: 'けいさんしよう',
+    prompt: `${F(a, b)}<span class="op">${MINUS}</span>${F(c, d)}`,
+    choices: makeChoices(cF(sn, sd), [(a > c && b > d) ? cF(a - c, b - d) : null, cF(...red(A + C, L))], [S !== sn ? cF(S, L, { eq: true }) : null, a !== c ? cF(Math.abs(a - c), L) : null, cF(...red(S + 1, L)), cF(...red(S - 1, L))], { fill: fracFill(sn, sd) }),
+    steps, hint: 'まず 分母を そろえよう（通分）',
+    meta: { kind: 'frac', expect: [S, L], reduced: true, src: { op: '-', fr: [[a, b], [c, d]] } }
+  };
+};
+
+Q.madd = () => {
+  const w1 = R(1, 3), w2 = R(1, 2);
+  const { a, b, c, d, L } = pickTwo(9, 24);
+  const A = a * L / b, C = c * L / d, S = A + C;
+  let W = w1 + w2, r = S; const carry = S > L;
+  if (carry) { W += 1; r = S - L; }
+  const [rn, rd] = red(r, L);
+  const correct = cF(W * rd + rn, rd, { mixed: true });
+  const steps = [`整数どうし：${w1} + ${w2} = ${w1 + w2}`, `分数どうし：${F(a, b)} + ${F(c, d)} = ${F(A, L)} + ${F(C, L)} = ${F(S, L)}`];
+  if (carry) steps.push(`${F(S, L)} は 1より 大きいので 1 くり上げる → ${w1 + w2 + 1} と ${F(r, L)}`);
+  if (r !== rn) steps.push(`約分：${F(r, L)} = ${F(rn, rd)}`);
+  steps.push(`こたえ：${correct.html}`);
+  const prim = [carry ? cF((W - 1) * rd + rn, rd, { mixed: true }) : cF((W + 1) * rd + rn, rd, { mixed: true }),
+    cF((w1 + w2) * (b + d) + (a + c), b + d, { mixed: true })];
+  const sec = [r !== rn ? cF(W * L + r, L, { mixed: true, eq: true }) : null];
+  for (const dr of [1, -1, 2]) { if (r + dr > 0 && r + dr < L) { const [x, y] = red(r + dr, L); sec.push(cF(W * y + x, y, { mixed: true })); } }
+  return {
+    topic: 'madd', label: 'けいさんしよう',
+    prompt: `${M(w1, a, b)}<span class="op">+</span>${M(w2, c, d)}`,
+    choices: makeChoices(correct, prim, sec, { fill: () => { const ww = W + R(-1, 1); const [x, y] = red(Math.max(1, r + R(-3, 3)), L); return ww >= 1 && x < y ? cF(ww * y + x, y, { mixed: true }) : null; } }),
+    steps, hint: '整数と 分数に わけて けいさんしよう',
+    meta: { kind: 'frac', expect: [(w1 * b + a) * d + (w2 * d + c) * b, b * d], reduced: true }
+  };
+};
+
+Q.msub = () => {
+  const w1 = R(2, 4), w2 = R(1, w1 - 1);
+  const { a, b, c, d, L } = pickTwo(9, 24);
+  const A = a * L / b, C = c * L / d;
+  let W = w1 - w2, r; const borrow = A < C;
+  if (borrow) { r = A + L - C; W -= 1; } else { r = A - C; }
+  const [rn, rd] = red(r, L);
+  const correct = cF(W * rd + rn, rd, { mixed: true });
+  const steps = [`分母を ${L} に そろえる：${M(w1, A, L)} ${MINUS} ${M(w2, C, L)}`];
+  if (borrow) {
+    steps.push(`${F(A, L)} から ${F(C, L)} は ひけないので、${w1} から 1 くり下げる：${M(w1, A, L)} = ${M(w1 - 1, A + L, L)}`);
+    steps.push(`整数：${w1 - 1} ${MINUS} ${w2} = ${W}　分数：${F(A + L, L)} ${MINUS} ${F(C, L)} = ${F(r, L)}`);
+  } else {
+    steps.push(`整数：${w1} ${MINUS} ${w2} = ${W}　分数：${F(A, L)} ${MINUS} ${F(C, L)} = ${F(r, L)}`);
+  }
+  if (r !== rn) steps.push(`約分：${F(r, L)} = ${F(rn, rd)}`);
+  steps.push(`こたえ：${correct.html}`);
+  const prim = [];
+  if (borrow) {
+    const [x, y] = red(C - A, L); prim.push(cF((w1 - w2) * y + x, y, { mixed: true }));
+    prim.push(cF((W + 1) * rd + rn, rd, { mixed: true }));
+  } else {
+    prim.push(W > 1 ? cF((W - 1) * rd + rn, rd, { mixed: true }) : cF((W + 1) * rd + rn, rd, { mixed: true }));
+  }
+  const sec = [r !== rn ? cF(W * L + r, L, { mixed: true, eq: true }) : null];
+  for (const dr of [1, -1, 2]) { if (r + dr > 0 && r + dr < L) { const [x, y] = red(r + dr, L); sec.push(cF(W * y + x, y, { mixed: true })); } }
+  return {
+    topic: 'msub', label: 'けいさんしよう',
+    prompt: `${M(w1, a, b)}<span class="op">${MINUS}</span>${M(w2, c, d)}`,
+    choices: makeChoices(correct, prim, sec, { fill: () => { const ww = W + R(-1, 1); const [x, y] = red(Math.max(1, r + R(-3, 3)), L); return ww >= 0 && x < y ? cF(ww * y + x, y, { mixed: true }) : null; } }),
+    steps, hint: borrow ? '分数の ところが ひけない ときは、整数から 1 くり下げよう' : '整数と 分数に わけて けいさんしよう',
+    meta: { kind: 'frac', expect: [(w1 * b + a) * d - (w2 * d + c) * b, b * d], reduced: true }
+  };
+};
+
+const DEC_SET = [[1, 2], [1, 4], [3, 4], [1, 5], [2, 5], [3, 5], [4, 5], [1, 10], [3, 10], [7, 10], [9, 10], [1, 20], [3, 20], [7, 20], [1, 25], [2, 25], [1, 8], [3, 8], [5, 8], [3, 2], [5, 4], [6, 5], [7, 4]];
+Q.decimal = () => {
+  const [n, d] = pick(DEC_SET);
+  const x = n / d, dec = fmtDec(x), p = decPlaces(dec), P = 10 ** p, iv = Math.round(x * P);
+  if (Math.random() < 0.5) {
+    return {
+      topic: 'decimal', label: '小数で あらわすと？',
+      prompt: `${F(n, d)}<span class="op">=</span>${BOX}`,
+      choices: makeChoices(cD(x), [cD(parseFloat(`0.${n}${d}`)), cD(n / 10)], [cD(x * 10), cD(x / 10), cD(d / n), cD(x + 0.1), cD(x + 0.05)], { fill: () => cD(x + R(-4, 6) * 0.05) }),
+      steps: [`分数は わり算に なおせる：${F(n, d)} = ${n} ÷ ${d}`, `${n} ÷ ${d} = ${dec}`],
+      hint: `${F(n, d)} は ${n} ÷ ${d} と おなじ`,
+      meta: { kind: 'dec', expect: x }
+    };
+  }
+  const unit = p === 1 ? '0.1' : p === 2 ? '0.01' : '0.001';
+  const steps = [`${dec} は ${unit} が ${iv} こ → ${F(iv, P)}`];
+  if (iv !== n) steps.push(`約分して ${F(n, d)}`);
+  return {
+    topic: 'decimal', label: '分数で あらわすと？（約分してね）',
+    prompt: `${I(dec)}<span class="op">=</span>${BOX}`,
+    choices: makeChoices(cF(n, d), [iv !== n ? cF(iv, P, { eq: true }) : null, p === 2 ? cF(iv, 10) : cF(iv, 100)], [n > 1 ? cF(d, n) : null, cF(...red(n + 1, d)), cF(...red(n, d + 1))], { fill: fracFill(n, d) }),
+    steps, hint: `${unit} が いくつ あるかな？`,
+    meta: { kind: 'frac', expect: [iv, P], reduced: true }
+  };
+};
+
+Q.three = () => {
+  const DEN = [2, 3, 4, 5, 6, 8, 10, 12];
+  let b, d, f, L, a, c, e, ops, A, C, E, S;
+  for (;;) {
+    b = pick(DEN); d = pick(DEN); f = pick(DEN);
+    if (b === d && d === f) continue;
+    L = lcm(lcm(b, d), f); if (L > 24) continue;
+    a = coprimeNum(b); c = coprimeNum(d); e = coprimeNum(f);
+    ops = pick([['+', '+'], ['+', '-'], ['-', '+']]);
+    A = a * L / b; C = c * L / d; E = e * L / f;
+    const t = ops[0] === '+' ? A + C : A - C;
+    if (t <= 0) continue;
+    S = ops[1] === '+' ? t + E : t - E;
+    if (S <= 0) continue;
+    break;
+  }
+  const [sn, sd] = red(S, L);
+  const sym = o => o === '+' ? '+' : MINUS;
+  const correct = sd === 1 ? cI(sn) : cF(sn, sd);
+  const steps = [`3つの 分母 ${b}・${d}・${f} を ${L} に そろえる`,
+    `${F(a, b)} ${sym(ops[0])} ${F(c, d)} ${sym(ops[1])} ${F(e, f)} = ${F(A, L)} ${sym(ops[0])} ${F(C, L)} ${sym(ops[1])} ${F(E, L)}`,
+    `= ${F(S, L)}`];
+  if (S !== sn) steps.push(sd === 1 ? `= ${sn}` : `約分して ${F(sn, sd)}`);
+  const numSum = (ops[0] === '+' ? a + c : a - c) + (ops[1] === '+' ? e : -e);
+  const near = dv => { const v = S + dv; if (v <= 0) return null; const [x, y] = red(v, L); return y === 1 ? cI(x) : cF(x, y); };
+  const allPlus = (ops[0] !== '+' || ops[1] !== '+') ? (() => { const [x, y] = red(A + C + E, L); return y === 1 ? cI(x) : cF(x, y); })() : null;
+  return {
+    topic: 'three', label: 'けいさんしよう',
+    prompt: `${F(a, b)}<span class="op">${sym(ops[0])}</span>${F(c, d)}<span class="op">${sym(ops[1])}</span>${F(e, f)}`,
+    choices: makeChoices(correct, [numSum > 0 ? cF(numSum, b + d + f) : null, allPlus], [S !== sn && sd !== 1 ? cF(S, L, { eq: true }) : null, near(1), near(-1), near(2)], { fill: () => near(R(-4, 5)) }),
+    steps, hint: '3つ まとめて 分母を そろえよう',
+    meta: { kind: 'frac', expect: [S, L], reduced: true }
+  };
+};
+// ===== サウンド：BGM・効果音・鳴き声はすべてオリジナルを WebAudio でその場で合成 =====
+const AudioEngine = {
+  ctx: null, master: null, music: null, sfx: null, waves: {}, noise: null,
+  ensure() {
+    if (!this.ctx) {
+      try {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return null;
+        const c = new AC();
+        this.ctx = c;
+        const comp = c.createDynamicsCompressor();
+        comp.threshold.value = -16; comp.ratio.value = 4;
+        comp.connect(c.destination);
+        this.master = c.createGain(); this.master.gain.value = 0.9; this.master.connect(comp);
+        this.music = c.createGain(); this.music.gain.value = 0.5; this.music.connect(this.master);
+        this.sfx = c.createGain(); this.sfx.gain.value = 0.9; this.sfx.connect(this.master);
+        this.waves.p25 = this.pulseWave(0.25);
+        this.waves.p125 = this.pulseWave(0.125);
+        const buf = c.createBuffer(1, c.sampleRate, c.sampleRate), d = buf.getChannelData(0);
+        for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+        this.noise = buf;
+      } catch (e) { this.ctx = null; return null; }
+    }
+    if (this.ctx.state === 'suspended' && !document.hidden) {
+      this.ctx.resume().then(() => { Music.sync(); updateAudioUI(); }).catch(() => {});
+    }
+    return this.ctx;
+  },
+  running() { return !!this.ctx && this.ctx.state === 'running'; },
+  pulseWave(duty) {
+    const n = 48, re = new Float32Array(n), im = new Float32Array(n);
+    for (let k = 1; k < n; k++) re[k] = 2 / (k * Math.PI) * Math.sin(k * Math.PI * duty);
+    return this.ctx.createPeriodicWave(re, im);
+  },
+  setWave(o, w) { if (this.waves[w]) o.setPeriodicWave(this.waves[w]); else o.type = w; },
+  note(dest, t, freq, dur, inst) {
+    const c = this.ctx, o = c.createOscillator(), g = c.createGain();
+    this.setWave(o, inst.wave);
+    o.frequency.setValueAtTime(freq, t);
+    const end = t + Math.max(0.04, dur);
+    if (inst.vib && dur > 0.25) {
+      const l = c.createOscillator(), lg = c.createGain();
+      l.frequency.value = 5.5; lg.gain.value = freq * 0.012;
+      l.connect(lg); lg.connect(o.frequency); l.start(t + 0.15); l.stop(end + 0.02);
+    }
+    const v = inst.vol, sus = inst.sus ?? 0.7;
+    const a = t + 0.006;
+    const b = Math.max(a + 0.002, Math.min(t + 0.006 + (inst.dec ?? 0.08), end - 0.03));
+    const r = Math.max(b + 0.001, end - 0.025);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(v, a);
+    g.gain.linearRampToValueAtTime(v * sus, b);
+    g.gain.setValueAtTime(v * sus, r);
+    g.gain.linearRampToValueAtTime(0.0001, end);
+    o.connect(g); g.connect(dest); o.start(t); o.stop(end + 0.03);
+  },
+  kick(dest, t, vol) {
+    const c = this.ctx, o = c.createOscillator(), g = c.createGain();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(150, t); o.frequency.exponentialRampToValueAtTime(45, t + 0.12);
+    g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.16);
+    o.connect(g); g.connect(dest); o.start(t); o.stop(t + 0.18);
+  },
+  noiseHit(dest, t, vol, dur, type, freq) {
+    const c = this.ctx, s = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
+    s.buffer = this.noise; f.type = type; f.frequency.value = freq;
+    g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+    s.connect(f); f.connect(g); g.connect(dest);
+    s.start(t, Math.random() * 0.5); s.stop(t + dur + 0.02);
+  },
+  drum(dest, t, ch, k) {
+    if (ch === 'k' || ch === 'K') this.kick(dest, t, 0.55 * k);
+    if (ch === 's' || ch === 'S') this.noiseHit(dest, t, 0.24 * k, 0.13, 'bandpass', 1800);
+    if (ch === 'h' || ch === 'K' || ch === 'S') this.noiseHit(dest, t, 0.07 * k, 0.035, 'highpass', 7000);
+  }
+};
+
+// ---- 楽譜 ----
+const NOTE_IDX = { C: 0, 'C#': 1, D: 2, 'D#': 3, E: 4, F: 5, 'F#': 6, G: 7, 'G#': 8, A: 9, 'A#': 10, B: 11 };
+function nf(s) {
+  const m = /^([A-G]#?)(\d)$/.exec(s);
+  if (!m) throw new Error('bad note ' + s);
+  return 440 * Math.pow(2, (NOTE_IDX[m[1]] + (+m[2] + 1) * 12 - 69) / 12);
+}
+const INST = {
+  lead: { wave: 'p25', vol: 0.11, dec: 0.1, sus: 0.6, vib: true, gate: 0.92 },
+  leadB: { wave: 'square', vol: 0.085, dec: 0.08, sus: 0.65, vib: true, gate: 0.9 },
+  arp: { wave: 'p125', vol: 0.032, dec: 0.04, sus: 0.5, gate: 0.6 },
+  bass: { wave: 'triangle', vol: 0.24, dec: 0.05, sus: 0.9, gate: 0.88 }
+};
+const CHORD = {
+  C: ['C4', 'E4', 'G4'], G: ['B3', 'D4', 'G4'], Am: ['A3', 'C4', 'E4'], F: ['A3', 'C4', 'F4'], E: ['G#3', 'B3', 'E4'],
+  Dm: ['D4', 'F4', 'A4'], Bb: ['D4', 'F4', 'A#4'], A: ['C#4', 'E4', 'A4'], Gm: ['D4', 'G4', 'A#4']
+};
+const BASS_SET = {
+  field: { C: ['C3', 'G2', 'C4'], G: ['G2', 'D3', 'G3'], Am: ['A2', 'E3', 'A3'], F: ['F2', 'C3', 'F3'] },
+  battle: { Am: ['A2', 'A3'], F: ['F2', 'F3'], G: ['G2', 'G3'], E: ['E2', 'E3'] },
+  legend: { Dm: ['D3', 'D2'], Bb: ['A#2', 'A#1'], C: ['C3', 'C2'], A: ['A2', 'A1'], Gm: ['G2', 'G1'] }
+};
+const BASS_STYLE = {
+  bounce: p => [p[0], '-', '-', '.', p[1], '-', '-', '.', p[2], '-', '-', '.', p[1], '-', '-', '.'],
+  drive: p => [p[0], '-', p[1], '-', p[0], '-', p[1], '-', p[0], '-', p[1], '-', p[0], '-', p[1], '-'],
+  long: p => [p[0], ...Array(15).fill('-')]
+};
+const SONG_DEFS = {
+  // マップ（はれた日の そうげんを あるく イメージ）
+  field: {
+    bpm: 126, chords: ['C', 'G', 'Am', 'F', 'C', 'G', 'F', 'G'], bassSet: 'field', bass: 'bounce', arpRate: 2, arpPat: [0, 1, 2, 1],
+    drums: ['K.h.S.h.K.h.S.h.'], drumVol: 0.55,
+    lead: [
+      'E5 - - G5 - - C6 - B5 - A5 - G5 - - -',
+      'D5 - - G5 - - B5 - A5 - G5 - F5 - D5 -',
+      'C5 - - E5 - - A5 - G5 - E5 - C5 - - -',
+      'A4 - C5 - F5 - - - E5 - D5 - C5 - D5 -',
+      'E5 - - G5 - - C6 - D6 - C6 - B5 - G5 -',
+      'A5 - - G5 - - F5 - E5 - D5 - B4 - D5 -',
+      'C5 - A4 - C5 - F5 - A5 - G5 - F5 - A5 -',
+      'G5 - - - - - . . D5 - E5 - F5 - G5 -'
+    ]
+  },
+  // ふつうの モンスターとの しょうぶ
+  battle: {
+    bpm: 170, chords: ['Am', 'Am', 'F', 'G', 'Am', 'Am', 'F', 'E'], bassSet: 'battle', bass: 'drive', arpRate: 1, arpPat: [0, 1, 2, 1],
+    drums: ['K.h.S.hkK.h.S.hS'], drumVol: 0.8, leadInst: 'leadB',
+    lead: [
+      'A4 - C5 - E5 - A5 - G5 - E5 - C5 - E5 -',
+      'A5 - - - G5 - - - E5 - D5 - C5 - D5 -',
+      'C5 - - F5 - - A5 - G5 - F5 - E5 - F5 -',
+      'G5 - - - D5 - - - B4 - D5 - G5 - B5 -',
+      'A5 - - - E5 - A5 - C6 - B5 - A5 - G5 -',
+      'E5 - - - C5 - E5 - A5 - - - - . G5 -',
+      'F5 - - - A5 - - - C6 - B5 - A5 - F5 -',
+      'E5 - - - G#5 - - - B5 - - - E6 - - -'
+    ]
+  },
+  // でんせつの モンスターとの しょうぶ
+  legend: {
+    bpm: 150, chords: ['Dm', 'Bb', 'C', 'A', 'Dm', 'Bb', 'Gm', 'A'], bassSet: 'legend', bass: 'drive', arpRate: 1, arpPat: [0, 1, 2, 1],
+    drums: ['K.h.S.h.K.hKS.hh'], drumVol: 0.9, leadInst: 'leadB',
+    lead: [
+      'D5 - - - - - F5 - A5 - - - - - G5 -',
+      'F5 - - - - - D5 - A#4 - - - D5 - F5 -',
+      'E5 - - - - - G5 - C6 - - - A#5 - A5 -',
+      'A5 - - - - - - - C#6 - - - E6 - - -',
+      'D6 - - - C6 - A5 - F5 - - - A5 - D6 -',
+      'D6 - - - - - A#5 - F5 - - - D5 - F5 -',
+      'G5 - - - A#5 - - - D6 - - - C6 - A#5 -',
+      'A5 - - - - - - - E5 - G5 - A5 - C#6 -'
+    ]
+  },
+  // ゲットした ときの ファンファーレ
+  victory: {
+    bpm: 150, loop: false, chords: ['C', 'G', 'C'], bassSet: 'field', bass: 'bounce', arpRate: 1, arpPat: [0, 1, 2, 1],
+    drums: ['K...S...K.K.S...', 'K...S...K.K.S.SS', 'K...............'], drumVol: 0.8,
+    lead: [
+      'G4 C5 E5 G5 - - E5 - G5 - - - C6 - - -',
+      'B5 - - - G5 - A5 - B5 - - - C6 - - -',
+      '- - - - - - - - . . . . . . . .'
+    ]
+  },
+  // にげられた ときの メロディ
+  lose: {
+    bpm: 96, loop: false, chords: ['Am', 'Am'], bassSet: 'field', bass: 'long', arpRate: 4, arpPat: [0, 1, 2, 1],
+    drums: ['................'], drumVol: 0,
+    lead: [
+      'E5 - D5 - C5 - B4 - A4 - - - G#4 - - -',
+      'A4 - - - - - - - . . . . . . . .'
+    ]
+  }
+};
+function buildSong(d) {
+  const bars = d.lead.length, len = bars * 16;
+  const steps = Array.from({ length: len }, () => []);
+  const addSeq = (tokens, inst) => {
+    let cur = null;
+    tokens.forEach((tk, i) => {
+      if (tk === '-') { if (cur) cur.len++; }
+      else if (tk === '.') cur = null;
+      else { cur = { f: nf(tk), len: 1, inst }; steps[i].push(cur); }
+    });
+  };
+  addSeq(d.lead.join(' ').trim().split(/\s+/), INST[d.leadInst || 'lead']);
+  const arp = [], bass = [];
+  d.chords.forEach(cn => {
+    const ch = CHORD[cn];
+    for (let i = 0; i < 16; i++) arp.push(i % d.arpRate === 0 ? ch[d.arpPat[(i / d.arpRate) % d.arpPat.length]] : '-');
+    const set = BASS_SET[d.bassSet];
+    bass.push(...BASS_STYLE[d.bass](set[cn] || [CHORD[cn][0].replace(/\d/, '2'), CHORD[cn][0].replace(/\d/, '2'), CHORD[cn][0].replace(/\d/, '3')]));
+  });
+  addSeq(arp, INST.arp);
+  addSeq(bass, INST.bass);
+  for (let b = 0; b < bars; b++) {
+    const pat = d.drums[b % d.drums.length];
+    for (let i = 0; i < 16; i++) { const ch = pat[i]; if (ch && ch !== '.') steps[b * 16 + i].push({ drum: ch }); }
+  }
+  return { bpm: d.bpm, loop: d.loop !== false, len, steps, drumVol: d.drumVol ?? 1 };
+}
+const SONGS = Object.fromEntries(Object.entries(SONG_DEFS).map(([k, d]) => [k, buildSong(d)]));
+
+// ---- BGM プレイヤー ----
+const Music = {
+  want: null, cur: null, timer: null, gain: null, song: null, step: 0, next: 0, onEnd: null,
+  request(name) { this.want = name; this.sync(); },
+  sync() {
+    if (!save.bgm || !this.want) { if (this.timer && !this.oneShot) this.stop(); return; }
+    if (!AudioEngine.running()) return;
+    if (this.cur === this.want && this.timer) return;
+    this.start(this.want);
+  },
+  start(name, onEnd) {
+    this.stop(0.25);
+    const c = AudioEngine.ensure(); if (!c) return;
+    const song = SONGS[name]; if (!song) return;
+    this.cur = name; this.song = song; this.step = 0; this.next = c.currentTime + 0.08;
+    this.onEnd = onEnd || null; this.oneShot = !song.loop;
+    const g = c.createGain(); g.gain.value = 1; g.connect(AudioEngine.music); this.gain = g;
+    this.timer = setInterval(() => this.tick(), 25);
+    this.tick();
+  },
+  tick() {
+    const c = AudioEngine.ctx, s = this.song;
+    if (!c || !s || !this.gain) return;
+    const stepDur = 60 / s.bpm / 4;
+    if (this.next < c.currentTime - 0.5) this.next = c.currentTime + 0.05; // タブ復帰などで遅れたとき
+    while (this.next < c.currentTime + 0.15) {
+      if (this.step >= s.len) {
+        if (s.loop) this.step = 0;
+        else {
+          const cb = this.onEnd, wait = Math.max(0, (this.next - c.currentTime) * 1000) + 600;
+          clearInterval(this.timer); this.timer = null; this.cur = null; this.song = null; this.oneShot = false;
+          if (cb) setTimeout(cb, wait);
+          return;
+        }
+      }
+      for (const e of s.steps[this.step]) {
+        if (e.drum) { if (s.drumVol > 0) AudioEngine.drum(this.gain, this.next, e.drum, s.drumVol); }
+        else AudioEngine.note(this.gain, this.next, e.f, e.len * stepDur * (e.inst.gate ?? 0.9), e.inst);
+      }
+      this.next += stepDur; this.step++;
+    }
+  },
+  stop(fade = 0.2) {
+    if (this.timer) { clearInterval(this.timer); this.timer = null; }
+    const c = AudioEngine.ctx, g = this.gain;
+    if (c && g) {
+      const t = c.currentTime;
+      g.gain.cancelScheduledValues(t); g.gain.setValueAtTime(g.gain.value, t); g.gain.linearRampToValueAtTime(0.0001, t + fade);
+      setTimeout(() => { try { g.disconnect(); } catch (e) { /* もう切れている */ } }, fade * 1000 + 800);
+    }
+    this.gain = null; this.cur = null; this.song = null; this.oneShot = false;
+  },
+  jingle(name) {
+    this.want = null;
+    if (!save.bgm || !AudioEngine.running()) return false;
+    this.start(name, () => { this.sync(); });
+    return true;
+  }
+};
+
+// ---- 効果音 ----
+const CRIES = {
+  happamochi: { w: 'square', f: 660, seq: [1, 1.33, 1.2], d: 0.09 },
+  mokumofu: { w: 'sine', f: 520, seq: [1, 1.12, 1.25, 1.12], d: 0.11 },
+  mimikusa: { w: 'p25', f: 880, seq: [1, 1.5, 1, 1.5], d: 0.06 },
+  koroishi: { w: 'triangle', f: 196, seq: [1, 0.9, 1.2], d: 0.12 },
+  shizukun: { w: 'sine', f: 700, seq: [1.5, 1.2, 1], d: 0.09, slide: true },
+  yukidaman: { w: 'triangle', f: 600, seq: [1, 1.26, 1.5, 2], d: 0.07 },
+  inazumo: { w: 'sawtooth', f: 440, seq: [1, 2, 1, 2, 1], d: 0.045 },
+  yofukuro: { w: 'sine', f: 330, seq: [1, 1, 0.75], d: 0.18 },
+  hidamaru: { w: 'square', f: 500, seq: [1, 1.5, 1.25, 1.68], d: 0.07 },
+  kazanbo: { w: 'sawtooth', f: 150, seq: [1, 1.3, 0.8], d: 0.14, slide: true },
+  housekin: { w: 'triangle', f: 1046, seq: [1, 1.5, 2, 1.5, 2], d: 0.05 },
+  hoshipiko: { w: 'p25', f: 784, seq: [1, 1.26, 1.5, 2, 2.52], d: 0.05 },
+  bunsuuryu: { w: 'sawtooth', f: 220, seq: [1, 1.5, 1.33, 2], d: 0.2, slide: true }
+};
+const Snd = {
+  tone(f, t0, dur, type = 'square', vol = 0.07, slideTo) {
+    const A = AudioEngine, c = A.ctx, o = c.createOscillator(), g = c.createGain(), s = c.currentTime + t0;
+    A.setWave(o, type);
+    o.frequency.setValueAtTime(f, s);
+    if (slideTo) o.frequency.exponentialRampToValueAtTime(slideTo, s + dur);
+    g.gain.setValueAtTime(vol, s); g.gain.exponentialRampToValueAtTime(0.0001, s + dur);
+    o.connect(g); g.connect(A.sfx); o.start(s); o.stop(s + dur + 0.03);
+  },
+  play(name) {
+    if (!save.sound || !AudioEngine.ensure()) return;
+    const T = (...a) => this.tone(...a);
+    try {
+      switch (name) {
+        case 'tap': T(1200, 0, 0.035, 'triangle', 0.05); break;
+        case 'ok': T(988, 0, 0.09, 'p25', 0.08); T(1319, 0.08, 0.2, 'p25', 0.08); [1568, 2093, 2637].forEach((f, i) => T(f, 0.22 + i * 0.05, 0.08, 'triangle', 0.05)); break;
+        case 'ng': T(233, 0, 0.18, 'sawtooth', 0.05); T(175, 0.16, 0.3, 'sawtooth', 0.05); break;
+        case 'heart': T(660, 0, 0.12, 'sine', 0.08, 330); break;
+        case 'hint': [1568, 2093].forEach((f, i) => T(f, i * 0.07, 0.12, 'triangle', 0.05)); break;
+        case 'appear': [523, 659, 784, 1047].forEach((f, i) => T(f, i * 0.06, 0.1, 'p25', 0.07)); break;
+        case 'legend': [196, 262, 330, 392, 523].forEach((f, i) => T(f, i * 0.11, 0.3, 'sawtooth', 0.05)); T(98, 0, 0.9, 'triangle', 0.18); break;
+        case 'throw': T(300, 0, 0.35, 'triangle', 0.08, 1400); break;
+        case 'suck': T(1400, 0, 0.3, 'sine', 0.09, 300); break;
+        case 'tick': T(392, 0, 0.06, 'square', 0.06); T(523, 0.06, 0.06, 'square', 0.05); break;
+        case 'get': [523, 659, 784, 1047, 784, 1047].forEach((f, i) => T(f, i * 0.11, 0.17, 'square', 0.06)); break;
+        case 'flee': T(800, 0, 0.35, 'triangle', 0.07, 200); break;
+        case 'pop': T(700, 0, 0.08, 'sine', 0.08, 1400); break;
+      }
+    } catch (e) { /* 音が出せない環境では何もしない */ }
+  },
+  cry(id) {
+    const c = CRIES[id];
+    if (!c || !save.sound || !AudioEngine.ensure()) return;
+    try {
+      c.seq.forEach((m, i) => {
+        const next = c.seq[i + 1];
+        this.tone(c.f * m, i * c.d, c.d * 1.15, c.w, 0.075, c.slide && next ? c.f * next : undefined);
+      });
+    } catch (e) { /* 音が出せない環境では何もしない */ }
+  }
+};
+// ===== オリジナルモンスターの絵 =====
+const K = '#1d2433';
+const SW = `stroke="${K}" stroke-width="3" stroke-linejoin="round"`;
+const eye = (x, y, s = 1) => `<ellipse cx="${x}" cy="${y}" rx="${4.2 * s}" ry="${5.6 * s}" fill="${K}"/><circle cx="${x + 1.4 * s}" cy="${y - 2 * s}" r="${1.7 * s}" fill="#fff"/>`;
+const smile = (x, y, w = 5) => `<path d="M${x - w} ${y} Q${x} ${y + w * 0.9} ${x + w} ${y}" fill="none" stroke="${K}" stroke-width="2.4" stroke-linecap="round"/>`;
+const mouthO = (x, y, w = 5, c = '#e85d75') => `<path d="M${x - w} ${y} Q${x} ${y + w * 1.6} ${x + w} ${y} Z" fill="${c}" stroke="${K}" stroke-width="2.2" stroke-linejoin="round"/>`;
+const blush = (x, y, c = '#ff9eb0') => `<ellipse cx="${x}" cy="${y}" rx="5" ry="2.8" fill="${c}" opacity=".8"/>`;
+const oc = (cs, fill) => cs.map(([x, y, r]) => `<circle cx="${x}" cy="${y}" r="${r + 3}" fill="${K}"/>`).join('') + cs.map(([x, y, r]) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${fill}"/>`).join('');
+function starPath(cx, cy, R1, r1, n = 5) {
+  let d = '';
+  for (let i = 0; i < n * 2; i++) {
+    const ang = -Math.PI / 2 + i * Math.PI / n, rr = i % 2 ? r1 : R1;
+    d += (i ? 'L' : 'M') + (cx + rr * Math.cos(ang)).toFixed(1) + ' ' + (cy + rr * Math.sin(ang)).toFixed(1) + ' ';
+  }
+  return d + 'Z';
+}
+const sparkle = (x, y, r, fill = '#fff') => `<path d="${starPath(x, y, r, r * 0.35, 4)}" fill="${fill}" stroke="${K}" stroke-width="1.5" stroke-linejoin="round"/>`;
+
+const ART = {
+  happamochi: `
+    <ellipse cx="46" cy="104" rx="9" ry="5" fill="#5fae55" ${SW}/><ellipse cx="74" cy="104" rx="9" ry="5" fill="#5fae55" ${SW}/>
+    <path d="M60 52 L60 36" stroke="${K}" stroke-width="3" stroke-linecap="round"/>
+    <path d="M60 38 C52 22 34 24 36 34 C38 42 52 44 60 38Z" fill="#43a047" ${SW}/>
+    <path d="M60 38 C68 20 88 22 86 32 C84 42 68 44 60 38Z" fill="#6fcf5f" ${SW}/>
+    <ellipse cx="60" cy="76" rx="36" ry="28" fill="#bdebab" ${SW}/>
+    <ellipse cx="46" cy="60" rx="10" ry="4.5" fill="#fff" opacity=".6"/>
+    ${eye(48, 74)}${eye(72, 74)}${blush(38, 85)}${blush(82, 85)}${smile(60, 84, 5)}`,
+  mokumofu: `
+    ${oc([[100, 40, 5], [108, 37, 4]], '#f4f1ff')}
+    ${oc([[38, 78, 18], [60, 66, 24], [84, 78, 18], [50, 90, 17], [72, 90, 17]], '#f4f1ff')}
+    <path d="M34 92 Q60 106 88 92" stroke="#d6cdf7" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <ellipse cx="54" cy="52" rx="9" ry="4" fill="#fff"/>
+    ${eye(51, 77, 0.9)}${eye(69, 77, 0.9)}${blush(42, 87, '#ffb3c7')}${blush(78, 87, '#ffb3c7')}
+    <ellipse cx="60" cy="87" rx="3" ry="3.6" fill="${K}"/>`,
+  mimikusa: `
+    <circle cx="90" cy="94" r="7" fill="#fff" ${SW}/>
+    <path d="M50 64 C38 44 34 22 40 12 C50 24 56 44 56 62Z" fill="#5fb63f" ${SW}/>
+    <path d="M42 18 C46 32 50 46 53 60" stroke="#3a7f2b" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M70 64 C82 44 88 22 82 12 C72 24 66 44 64 62Z" fill="#7fd15a" ${SW}/>
+    <path d="M80 18 C76 32 70 46 67 60" stroke="#3a7f2b" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <ellipse cx="46" cy="106" rx="8" ry="4.5" fill="#c9e6a0" ${SW}/><ellipse cx="74" cy="106" rx="8" ry="4.5" fill="#c9e6a0" ${SW}/>
+    <ellipse cx="60" cy="82" rx="30" ry="26" fill="#e6f6c8" ${SW}/>
+    <ellipse cx="60" cy="92" rx="15" ry="10" fill="#fff" opacity=".75"/>
+    ${eye(49, 78)}${eye(71, 78)}
+    <path d="M57 86 L63 86 L60 89.5Z" fill="#e85d75" stroke="${K}" stroke-width="1.5" stroke-linejoin="round"/>
+    <path d="M55 92 Q57.5 94.5 60 92 Q62.5 94.5 65 92" fill="none" stroke="${K}" stroke-width="2" stroke-linecap="round"/>
+    ${blush(40, 88)}${blush(80, 88)}`,
+  koroishi: `
+    <ellipse cx="44" cy="104" rx="9" ry="5" fill="#7d776f" ${SW}/><ellipse cx="76" cy="104" rx="9" ry="5" fill="#7d776f" ${SW}/>
+    <polygon points="28,88 26,66 40,46 66,38 90,50 98,76 88,98 46,102" fill="#b3ada4" ${SW}/>
+    <polygon points="42,48 65,41 61,54 45,58" fill="#cdc8c0"/>
+    <path d="M86 60 L80 68 L86 75" fill="none" stroke="${K}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M34 82 L40 86" stroke="${K}" stroke-width="2" stroke-linecap="round"/>
+    <path d="M56 41 C59 32 69 31 72 40Z" fill="#7cc55a" stroke="${K}" stroke-width="2" stroke-linejoin="round"/>
+    ${eye(50, 72)}${eye(72, 72)}
+    <path d="M43 62 L55 65" stroke="${K}" stroke-width="3" stroke-linecap="round"/><path d="M79 62 L67 65" stroke="${K}" stroke-width="3" stroke-linecap="round"/>
+    ${smile(61, 84, 4)}`,
+  shizukun: `
+    <path d="M14 102 q5 -9 10 0 q-5 6 -10 0Z" fill="#a9dcfa" stroke="${K}" stroke-width="2"/>
+    <path d="M96 100 q5 -9 10 0 q-5 6 -10 0Z" fill="#a9dcfa" stroke="${K}" stroke-width="2"/>
+    <path d="M60 16 C70 34 94 58 94 80 C94 98 79 108 60 108 C41 108 26 98 26 80 C26 58 50 34 60 16Z" fill="#7cc8f5" ${SW}/>
+    <path d="M41 64 C43 54 49 45 53 41" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" opacity=".85"/>
+    <circle cx="39" cy="74" r="3" fill="#fff" opacity=".85"/>
+    ${eye(49, 80)}${eye(71, 80)}${blush(40, 91, '#ffa8c0')}${blush(80, 91, '#ffa8c0')}${mouthO(60, 90, 4.5)}`,
+  yukidaman: `
+    <path d="M38 86 L22 78 M27 80.5 L23 72" stroke="#8d6e63" stroke-width="3" stroke-linecap="round"/>
+    <path d="M82 86 L98 78 M93 80.5 L97 72" stroke="#8d6e63" stroke-width="3" stroke-linecap="round"/>
+    ${oc([[60, 88, 24], [60, 56, 19]], '#f2fbff')}
+    <path d="M42 102 Q60 112 78 102" stroke="#d3ebf8" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <path d="M42 70 Q60 78 78 70 L78 76 Q60 84 42 76Z" fill="#4f9de0" ${SW}/>
+    <path d="M68 77 L74 92 L64 90Z" fill="#4f9de0" ${SW}/>
+    <circle cx="57" cy="90" r="2.6" fill="#5c8fbf"/><circle cx="57" cy="100" r="2.6" fill="#5c8fbf"/>
+    <g stroke="#3aa7d9" stroke-width="3" stroke-linecap="round"><path d="M60 22 V38"/><path d="M53 26 L67 34"/><path d="M67 26 L53 34"/></g>
+    ${eye(53, 55, 0.8)}${eye(67, 55, 0.8)}${blush(46, 62, '#a8d8ff')}${blush(74, 62, '#a8d8ff')}${smile(60, 62, 4)}`,
+  inazumo: `
+    <polygon points="56,52 46,30 57,32 50,10 74,36 62,34 68,52" fill="#ffb300" ${SW}/>
+    <ellipse cx="28" cy="82" rx="7" ry="5" fill="#ffd84d" ${SW}/><ellipse cx="92" cy="82" rx="7" ry="5" fill="#ffd84d" ${SW}/>
+    <ellipse cx="46" cy="107" rx="8" ry="4.5" fill="#f2c230" ${SW}/><ellipse cx="74" cy="107" rx="8" ry="4.5" fill="#f2c230" ${SW}/>
+    <rect x="30" y="50" width="60" height="56" rx="24" fill="#ffe066" ${SW}/>
+    <rect x="44" y="80" width="32" height="19" rx="9.5" fill="#fff3b0"/>
+    <path d="M60 83.5 V95.5 M54 89.5 H66" stroke="#e0a100" stroke-width="3" stroke-linecap="round"/>
+    ${eye(49, 66)}${eye(71, 66)}${mouthO(60, 73, 4, '#ff8a65')}
+    <path d="M14 56 l7 4 -5 2 7 5" stroke="#ffb300" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M106 56 l-7 4 5 2 -7 5" stroke="#ffb300" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`,
+  yofukuro: `
+    <polygon points="34,50 37,28 51,43" fill="#2e3c6b" ${SW}/><polygon points="86,50 83,28 69,43" fill="#2e3c6b" ${SW}/>
+    <ellipse cx="31" cy="80" rx="10" ry="20" fill="#2e3c6b" ${SW}/><ellipse cx="89" cy="80" rx="10" ry="20" fill="#2e3c6b" ${SW}/>
+    <ellipse cx="50" cy="107" rx="6" ry="3.5" fill="#ff9f43" ${SW}/><ellipse cx="70" cy="107" rx="6" ry="3.5" fill="#ff9f43" ${SW}/>
+    <ellipse cx="60" cy="74" rx="30" ry="34" fill="#4a5c9a" ${SW}/>
+    <ellipse cx="60" cy="90" rx="17" ry="16" fill="#aebde9"/>
+    <path d="M52 86 l3 3 3 -3 M62 86 l3 3 3 -3 M57 94 l3 3 3 -3" stroke="#6c7fbf" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="48" cy="62" r="11" fill="#ffe066" stroke="${K}" stroke-width="2.5"/><circle cx="72" cy="62" r="11" fill="#ffe066" stroke="${K}" stroke-width="2.5"/>
+    <circle cx="49" cy="63" r="6" fill="${K}"/><circle cx="71" cy="63" r="6" fill="${K}"/>
+    <circle cx="51" cy="60.5" r="2.1" fill="#fff"/><circle cx="73" cy="60.5" r="2.1" fill="#fff"/>
+    <polygon points="56,71 64,71 60,78" fill="#ff9f43" stroke="${K}" stroke-width="2" stroke-linejoin="round"/>
+    <path d="${starPath(29, 74, 4, 1.4, 4)}" fill="#ffe066"/><path d="${starPath(91, 84, 4, 1.4, 4)}" fill="#ffe066"/><path d="${starPath(33, 88, 3, 1, 4)}" fill="#ffe066"/>`,
+  hidamaru: `
+    <path d="M84 94 C98 92 102 82 98 72" stroke="${K}" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <path d="M84 94 C98 92 102 82 98 72" stroke="#ff9a4d" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M98 58 C104 64 106 70 100 74 C96 76 92 72 94 68 C95 64 98 62 98 58Z" fill="#ff5a36" stroke="${K}" stroke-width="2.4" stroke-linejoin="round"/>
+    <path d="M60 14 C72 30 84 38 78 54 C74 62 46 62 42 54 C36 40 50 34 50 22 C55 30 58 28 60 14Z" fill="#ff5a36" ${SW}/>
+    <path d="M60 32 C66 40 70 46 66 54 C62 58 56 58 54 54 C50 46 58 42 60 32Z" fill="#ffd166"/>
+    <ellipse cx="46" cy="107" rx="8" ry="4.5" fill="#e8743a" ${SW}/><ellipse cx="74" cy="107" rx="8" ry="4.5" fill="#e8743a" ${SW}/>
+    <circle cx="60" cy="80" r="29" fill="#ff9a4d" ${SW}/>
+    <ellipse cx="60" cy="92" rx="15" ry="10" fill="#ffd6a8"/>
+    ${eye(49, 76)}${eye(71, 76)}${blush(40, 86, '#ffd166')}${blush(80, 86, '#ffd166')}${mouthO(60, 85, 5, '#c0392b')}`,
+  kazanbo: `
+    <path d="M90 94 C104 94 108 86 104 78" stroke="${K}" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <path d="M90 94 C104 94 108 86 104 78" stroke="#a1887f" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+    <circle cx="64" cy="27" r="6" fill="#e6e1dc" stroke="${K}" stroke-width="2"/><circle cx="72" cy="18" r="7" fill="#e6e1dc" stroke="${K}" stroke-width="2"/><circle cx="82" cy="11" r="5" fill="#e6e1dc" stroke="${K}" stroke-width="2"/>
+    <polygon points="44,66 52,40 68,40 76,66" fill="#795548" ${SW}/>
+    <path d="M51 42 L69 42 L66 51 Q63 46 61 53 Q58 46 55 51Z" fill="#ff7043" stroke="${K}" stroke-width="2" stroke-linejoin="round"/>
+    <ellipse cx="42" cy="106" rx="9" ry="5" fill="#6d4c41" ${SW}/><ellipse cx="78" cy="106" rx="9" ry="5" fill="#6d4c41" ${SW}/>
+    <ellipse cx="60" cy="84" rx="36" ry="24" fill="#a1887f" ${SW}/>
+    <ellipse cx="60" cy="95" rx="20" ry="8" fill="#d7ccc8"/>
+    <circle cx="35" cy="80" r="4" fill="#8d6e63"/><circle cx="86" cy="84" r="3" fill="#8d6e63"/>
+    ${eye(50, 80)}${eye(70, 80)}${blush(42, 89, '#ffab91')}${blush(78, 89, '#ffab91')}${smile(60, 89, 4.5)}`,
+  housekin: `
+    <polygon points="22,88 18,72 28,62 32,82" fill="#dccbff" ${SW}/><polygon points="98,88 102,72 92,62 88,82" fill="#dccbff" ${SW}/>
+    <polygon points="60,20 90,42 90,84 60,106 30,84 30,42" fill="#b18cf0"/>
+    <polygon points="60,20 90,42 74,48 46,48 30,42" fill="#d0b8ff"/>
+    <polygon points="30,84 46,90 74,90 90,84 60,106" fill="#8f66d6"/>
+    <path d="M46 48 L46 90 M74 48 L74 90" stroke="#9b7be0" stroke-width="2"/>
+    <polygon points="60,20 90,42 90,84 60,106 30,84 30,42" fill="none" ${SW}/>
+    ${sparkle(86, 26, 7)}
+    ${eye(53, 66, 0.85)}${eye(67, 66, 0.85)}${blush(47, 75, '#ffb3d9')}${blush(73, 75, '#ffb3d9')}${smile(60, 75, 4)}`,
+  hoshipiko: `
+    ${sparkle(18, 30, 6)}${sparkle(102, 22, 5)}${sparkle(106, 98, 4)}
+    <path d="${starPath(60, 66, 46, 22)}" fill="#ffe066" stroke="${K}" stroke-width="4" stroke-linejoin="round"/>
+    <ellipse cx="48" cy="48" rx="6" ry="3" fill="#fff" opacity=".7" transform="rotate(-30 48 48)"/>
+    ${eye(52, 66, 0.85)}${eye(68, 66, 0.85)}${blush(45, 75)}${blush(75, 75)}${mouthO(60, 74, 3.5)}`,
+  bunsuuryu: `
+    <circle cx="60" cy="64" r="55" fill="none" stroke="#f2b632" stroke-width="2.5" stroke-dasharray="4 7" stroke-linecap="round"/>
+    <path d="M42 70 C22 54 10 56 6 36 C18 42 26 38 30 26 C36 42 44 48 50 60Z" fill="#4fc3c7" ${SW}/>
+    <path d="M78 70 C98 54 110 56 114 36 C102 42 94 38 90 26 C84 42 76 48 70 60Z" fill="#4fc3c7" ${SW}/>
+    <path d="M78 98 C98 104 106 92 100 84 C96 80 90 84 94 88" stroke="${K}" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <path d="M78 98 C98 104 106 92 100 84 C96 80 90 84 94 88" stroke="#fff6d6" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+    <ellipse cx="48" cy="106" rx="8" ry="4.5" fill="#f2e2b0" ${SW}/><ellipse cx="72" cy="106" rx="8" ry="4.5" fill="#f2e2b0" ${SW}/>
+    <ellipse cx="60" cy="82" rx="24" ry="24" fill="#fff6d6" ${SW}/>
+    <path d="M48 32 C44 22 46 14 50 9 C52 18 54 24 55 30Z" fill="#f2b632" ${SW}/>
+    <path d="M72 32 C76 22 74 14 70 9 C68 18 66 24 65 30Z" fill="#f2b632" ${SW}/>
+    <circle cx="60" cy="46" r="19" fill="#fff6d6" ${SW}/>
+    <circle cx="60" cy="85" r="10" fill="#fff" stroke="${K}" stroke-width="2.5"/>
+    <path d="M60 75 A10 10 0 0 0 60 95 Z" fill="#f2b632"/>
+    <path d="M60 75 V95" stroke="${K}" stroke-width="2"/>
+    ${eye(52, 46, 0.85)}${eye(68, 46, 0.85)}
+    <path d="M47 38 L55 40" stroke="${K}" stroke-width="2.5" stroke-linecap="round"/><path d="M73 38 L65 40" stroke="${K}" stroke-width="2.5" stroke-linecap="round"/>
+    ${blush(46, 54, '#ffc7a8')}${blush(74, 54, '#ffc7a8')}${smile(60, 54, 3.5)}`
+};
+
+// ===== データ =====
+const MONS = [
+  { id: 'happamochi', no: 1, name: 'ハッパモチ', type: 'くさ', area: 'meadow', rar: 1, desc: 'あたまの はっぱで ひなたぼっこを する。もちもちの からだは つつくと すこし のびる。' },
+  { id: 'mokumofu', no: 2, name: 'モクモフ', type: 'くも', area: 'meadow', rar: 1, desc: 'そらから おちてきた ちいさな くも。きげんが いいと ふわっと うかぶ。' },
+  { id: 'mimikusa', no: 3, name: 'ミミクサ', type: 'くさ', area: 'meadow', rar: 2, desc: 'ながい くさの みみで かぜの おとを きく。そうげんを はやあしで かけまわる。' },
+  { id: 'koroishi', no: 4, name: 'コロイシ', type: 'いわ', area: 'meadow', rar: 3, desc: 'ころころ ころがって いどうする。あたまの こけは 100年 かけて のびた。' },
+  { id: 'shizukun', no: 5, name: 'シズクン', type: 'みず', area: 'lake', rar: 1, desc: 'みずうみの しずくから うまれた。ないて なみだが でると からだが すこし おおきく なる。' },
+  { id: 'yukidaman', no: 6, name: 'ユキダマン', type: 'こおり', area: 'lake', rar: 1, desc: 'さむい あさ、みずうみの ほとりで 見つかる。あたまの こおりの けっしょうが じまん。' },
+  { id: 'inazumo', no: 7, name: 'イナズモ', type: 'でんき', area: 'lake', rar: 2, desc: 'あたまの いなずまで でんきを ためる。くもりの 日は ちょっと げんきが ない。' },
+  { id: 'yofukuro', no: 8, name: 'ヨフクロ', type: 'よる', area: 'lake', rar: 3, desc: 'よるに なると 目が きいろく ひかる。ほしの かずを かぞえるのが とくい。' },
+  { id: 'hidamaru', no: 9, name: 'ヒダマル', type: 'ほのお', area: 'volcano', rar: 1, desc: 'あたまの ほのおは きもちで いろが かわる。うれしいと きいろく なる。' },
+  { id: 'kazanbo', no: 10, name: 'カザンボ', type: 'かざん', area: 'volcano', rar: 1, desc: 'せなかに ちいさな かざんを せおっている。びっくりすると けむりを ぽんと だす。' },
+  { id: 'housekin', no: 11, name: 'ホウセキン', type: 'こうせき', area: 'volcano', rar: 2, desc: 'からだが ほうせきで できている。ひかりを あてると なないろに かがやく。' },
+  { id: 'hoshipiko', no: 12, name: 'ホシピコ', type: 'ほし', area: 'volcano', rar: 3, desc: 'ながれぼしと いっしょに やってきた。5つの かどを ぴかぴかに みがいている。' },
+  { id: 'bunsuuryu', no: 13, name: 'ブンスウリュウ', type: 'でんせつ', area: 'tower', rar: 4, desc: 'ぶんすうの ちからを もつ でんせつの りゅう。どんな ものでも ぴったり おなじ 大きさに わけられる。' }
+];
+const MON = Object.fromEntries(MONS.map(m => [m.id, m]));
+const NEED = { 1: 2, 2: 3, 3: 4, 4: 5 };
+const RAR_W = { 1: 5, 2: 3, 3: 2, 4: 1 };
+const TYPE_COLOR = { くさ: '#3f9b45', くも: '#8a7be0', いわ: '#857c70', みず: '#2f86c9', こおり: '#2f9cc4', でんき: '#f2c230', よる: '#3d4f86', ほのお: '#e8562a', かざん: '#8d6e63', こうせき: '#8e5bd6', ほし: '#f2c230', でんせつ: '#b8860b' };
+const DARK_TEXT = new Set(['でんき', 'ほし']);
+const UNLOCK = 9;
+const AREAS = [
+  { id: 'meadow', name: 'はじまりのそうげん', lv: 1, lvName: 'かんたん', topics: ['equiv', 'reduce', 'divfrac'], pad: '#79c257' },
+  { id: 'lake', name: 'しずくのみずうみ', lv: 2, lvName: 'ふつう', topics: ['common', 'compare', 'add', 'sub'], pad: '#b7de95' },
+  { id: 'volcano', name: 'ほのおのやま', lv: 3, lvName: 'むずかしい', topics: ['madd', 'msub', 'decimal', 'three'], pad: '#b97b52' },
+  { id: 'tower', name: 'ほしぞらのとう', lv: 4, lvName: 'でんせつ', topics: ['reduce', 'common', 'add', 'sub', 'madd', 'msub', 'decimal', 'three'], pad: '#5258a8', unlock: UNLOCK }
+];
+
+// ===== 背景 =====
+const DECOR = (() => {
+  const wrap = inner => `<svg class="decor-svg" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${inner}</svg>`;
+  let seed = 7; const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+  let stars = '';
+  for (let i = 0; i < 46; i++) stars += `<circle cx="${(rnd() * 400).toFixed(0)}" cy="${(rnd() * 130).toFixed(0)}" r="${(0.8 + rnd() * 1.6).toFixed(1)}" fill="#fff" opacity="${(0.5 + rnd() * 0.5).toFixed(2)}"/>`;
+  const flower = (x, y) => `<circle cx="${x}" cy="${y}" r="4.5" fill="#fff"/><circle cx="${x}" cy="${y}" r="1.8" fill="#ffc933"/>`;
+  const tuft = (x, y) => `<path d="M${x} ${y} l4 -11 2 11 3 -8 2 8" stroke="#5fae55" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+  return {
+    meadow: wrap(`<rect width="400" height="200" fill="#c6ecff"/><circle cx="338" cy="42" r="24" fill="#fff1a1"/>
+      <g fill="#fff"><circle cx="78" cy="46" r="14"/><circle cx="97" cy="38" r="19"/><circle cx="118" cy="47" r="13"/><rect x="78" y="44" width="40" height="17" rx="6"/></g>
+      <g fill="#fff" opacity=".9"><circle cx="240" cy="30" r="9"/><circle cx="252" cy="25" r="12"/><circle cx="266" cy="31" r="8"/></g>
+      <path d="M0 118 Q70 84 150 112 T300 104 T400 110 V200 H0Z" fill="#b2e391"/>
+      <path d="M0 140 Q200 122 400 140 V200 H0Z" fill="#8fd16a"/>
+      ${flower(40, 170)}${flower(92, 188)}${flower(330, 176)}${flower(372, 160)}${flower(270, 192)}${tuft(18, 156)}${tuft(140, 186)}${tuft(300, 158)}${tuft(356, 190)}`),
+    lake: wrap(`<rect width="400" height="200" fill="#d4f0ff"/>
+      <path d="M0 104 L60 64 L110 96 L170 50 L240 100 L300 70 L400 104Z" fill="#a9c8e8"/>
+      <path d="M153 62 L170 50 L188 63 L179 61 L170 67 L161 61Z" fill="#fff"/>
+      <rect y="100" width="400" height="100" fill="#5cb8e6"/>
+      <g stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none" opacity=".7"><path d="M30 122 q10 -6 20 0 t20 0"/><path d="M300 118 q10 -6 20 0 t20 0"/><path d="M196 130 q10 -6 20 0 t20 0"/><path d="M70 150 q10 -6 20 0"/><path d="M330 146 q10 -6 20 0"/></g>
+      <path d="M0 168 Q200 148 400 168 V200 H0Z" fill="#cde8a8"/>
+      <g stroke="#4f8a3a" stroke-width="3" stroke-linecap="round"><path d="M24 174 V140"/><path d="M34 176 V132"/><path d="M372 172 V138"/><path d="M382 174 V146"/></g>
+      <g fill="#8d6e63"><rect x="30" y="128" width="8" height="16" rx="4"/><rect x="368" y="134" width="8" height="16" rx="4"/></g>`),
+    volcano: wrap(`<rect width="400" height="200" fill="#ffe2c6"/>
+      <g fill="#d9cfc7"><circle cx="214" cy="28" r="12"/><circle cx="230" cy="17" r="14"/><circle cx="250" cy="12" r="10"/></g>
+      <path d="M110 132 L186 44 L226 44 L306 132Z" fill="#a8674c"/>
+      <path d="M186 44 L226 44 L219 56 Q213 50 207 62 Q201 50 194 58Z" fill="#ff6a3d"/>
+      <path d="M207 62 Q203 80 210 98" stroke="#ff6a3d" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <path d="M0 128 L50 96 L96 128Z" fill="#c28264"/><path d="M300 128 L356 90 L400 120 V128Z" fill="#c28264"/>
+      <path d="M0 140 Q200 120 400 140 V200 H0Z" fill="#d39a6a"/>
+      <g fill="#a8674c"><ellipse cx="50" cy="176" rx="14" ry="7"/><ellipse cx="350" cy="168" rx="10" ry="6"/><ellipse cx="300" cy="190" rx="8" ry="5"/></g>`),
+    tower: wrap(`<rect width="400" height="200" fill="#262a66"/>${stars}
+      <circle cx="70" cy="46" r="18" fill="#fff4c2"/><circle cx="79" cy="40" r="16" fill="#262a66"/>
+      <path d="M318 140 V64 L336 40 L354 64 V140Z" fill="#3b3f86"/>
+      <rect x="331" y="72" width="10" height="14" rx="5" fill="#ffe14d"/><rect x="331" y="100" width="10" height="14" rx="5" fill="#ffe14d" opacity=".7"/>
+      <path d="M0 142 Q200 124 400 142 V200 H0Z" fill="#3a3f80"/>`)
+  };
+})();
+
+const JAR_SVG = `<svg viewBox="0 0 60 72" aria-hidden="true">
+  <rect x="21" y="2" width="18" height="11" rx="3" fill="#b07a4a" stroke="${K}" stroke-width="2.5"/>
+  <path d="M18 13 H42 V19 Q54 25 54 39 V58 Q54 68 44 68 H16 Q6 68 6 58 V39 Q6 25 18 19Z" fill="#c4ecf6" stroke="${K}" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="${starPath(30, 45, 10, 4.4)}" fill="#ffe14d" stroke="${K}" stroke-width="1.8" stroke-linejoin="round"/>
+  <path d="M13 36 Q13 28 19 24" stroke="#fff" stroke-width="3.5" fill="none" stroke-linecap="round"/></svg>`;
+const HEART = (on) => `<svg viewBox="0 0 24 24"><path d="M12 21s-7-4.6-9.5-9C.7 8.6 2.6 4 6.6 4c2.3 0 3.9 1.3 5.4 3.2C13.5 5.3 15.1 4 17.4 4c4 0 5.9 4.6 4.1 8-2.5 4.4-9.5 9-9.5 9z" fill="${on ? '#e03a3e' : '#d7dce5'}" stroke="${K}" stroke-width="1.8" stroke-linejoin="round"/></svg>`;
+const LOCK = `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2.5" fill="#ffe14d" stroke="${K}" stroke-width="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke="${K}" stroke-width="2"/></svg>`;
+
+function hanamaru() {
+  let d = '';
+  for (let i = 0; i <= 90; i++) { const t = i / 90, a = t * 2.3 * 2 * Math.PI - Math.PI / 2, r = 4 + 28 * t; d += (i ? 'L' : 'M') + (60 + r * Math.cos(a)).toFixed(1) + ' ' + (60 + r * Math.sin(a)).toFixed(1) + ' '; }
+  let p = '';
+  for (let i = 0; i <= 200; i++) { const a = i / 200 * 2 * Math.PI - Math.PI / 2, r = 41 + 11 * Math.abs(Math.sin(a * 4)); p += (i ? 'L' : 'M') + (60 + r * Math.cos(a)).toFixed(1) + ' ' + (60 + r * Math.sin(a)).toFixed(1) + ' '; }
+  return `<div class="stamp-inner"><svg viewBox="0 0 120 120" aria-hidden="true"><path pathLength="1" d="${d}"/><path class="petal" pathLength="1" d="${p}"/></svg><b>せいかい！</b></div>`;
+}
+
+const monSVG = id => `<svg viewBox="0 0 120 120" role="img" aria-label="${MON[id].name}">${ART[id]}</svg>`;
+const pad3 = n => String(n).padStart(3, '0');
+const rareText = m => m.rar === 4 ? 'でんせつ' : '★'.repeat(m.rar);
+const typeChip = m => `<span class="type-chip${DARK_TEXT.has(m.type) ? ' dark' : ''}" style="--tc:${TYPE_COLOR[m.type]}">${m.type}</span>`;
+
+// ===== セーブ =====
+const SAVE_KEY = 'bunsu-monster-v1';
+let save = { caught: {}, seen: {}, stats: {}, sound: true, bgm: true };
+function loadSave() {
+  try { const raw = localStorage.getItem(SAVE_KEY); if (raw) { const s = JSON.parse(raw); if (s && typeof s === 'object') save = { ...save, ...s }; } } catch (e) { /* 保存できない環境 */ }
+}
+function persist() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(save)); } catch (e) { /* 保存できない環境 */ } }
+const caughtKinds = f => MONS.filter(m => (save.caught[m.id] || 0) > 0 && (!f || f(m))).length;
+const normalCaught = () => caughtKinds(m => m.rar < 4);
+
+// ===== 画面 =====
+const $ = id => document.getElementById(id);
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const reduceMotion = () => window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function show(name) {
+  for (const s of ['home', 'battle', 'zukan']) $('scr-' + s).hidden = s !== name;
+  if (name !== 'battle') Music.request('field');
+  window.scrollTo(0, 0);
+}
+function setMsg(t) { $('bt-msg').textContent = t; }
+
+function miniIcon(m) {
+  if (save.caught[m.id]) return `<span class="mini" title="${m.name}">${monSVG(m.id)}</span>`;
+  if (save.seen[m.id]) return `<span class="mini sil" title="${m.name}">${monSVG(m.id)}</span>`;
+  return `<span class="mini" aria-label="まだ 見つけていない">？</span>`;
+}
+
+function renderHome() {
+  $('zukan-count').textContent = `${caughtKinds()}/${MONS.length}`;
+  updateAudioUI();
+  const n = normalCaught();
+  $('areas').innerHTML = AREAS.map(a => {
+    const mons = MONS.filter(m => m.area === a.id);
+    const locked = a.unlock && n < a.unlock;
+    const got = mons.filter(m => save.caught[m.id]).length;
+    const topics = a.id === 'tower' ? 'これまでの もんだいが まざって でる' : a.topics.map(t => TOPICS[t]).join('・');
+    return `<article class="area${locked ? ' locked' : ''}">
+      <div class="area-art">${DECOR[a.id]}${locked ? `<div class="lock-tag"><span>${LOCK}ロック中</span></div>` : ''}</div>
+      <div class="area-body">
+        <h3 class="area-name">${a.name}<span class="lv" data-lv="${a.lv}">${a.lvName}</span></h3>
+        <p class="area-topics">${topics}</p>
+        <div class="area-mons">${mons.map(miniIcon).join('')}</div>
+        <div class="area-foot"><span class="got">つかまえた ${got}/${mons.length}</span>${locked
+          ? `<span class="lock-note">あと ${a.unlock - n}しゅるい つかまえると ひらく</span>`
+          : `<button class="btn primary" data-area="${a.id}">ここで さがす</button>`}</div>
+      </div></article>`;
+  }).join('');
+}
+
+// ===== バトル =====
+let B = null;
+const OK_MSG = ['{n}が きょうみを もった！', '{n}が ちかづいて きた！', '{n}は うれしそうだ！', '{n}が こっちを 見ている！'];
+
+function chooseMonster(areaId) {
+  const list = MONS.filter(m => m.area === areaId);
+  const ws = list.map(m => RAR_W[m.rar] * (save.caught[m.id] ? 1 : 2));
+  let r = Math.random() * ws.reduce((a, b) => a + b, 0);
+  for (let i = 0; i < list.length; i++) { r -= ws[i]; if (r < 0) return list[i]; }
+  return list[list.length - 1];
+}
+
+function startBattle(areaId) {
+  const area = AREAS.find(a => a.id === areaId);
+  const mon = chooseMonster(areaId);
+  B = { area, mon, need: NEED[mon.rar], got: 0, hearts: 3, streak: 0, q: null, locked: true, lastTopic: null };
+  save.seen[mon.id] = true; persist();
+  show('battle');
+  $('bt-area').textContent = area.name;
+  $('scene').style.setProperty('--pad', area.pad);
+  $('scene-decor').innerHTML = DECOR[area.id];
+  const monEl = $('bt-mon');
+  monEl.className = 'mon'; void monEl.offsetWidth; monEl.classList.add('appear');
+  $('bt-mon-inner').className = 'mon-inner';
+  $('bt-mon-inner').innerHTML = monSVG(mon.id);
+  const jar = $('bt-jar'); jar.hidden = true; jar.className = 'jar';
+  $('bt-burst').innerHTML = '';
+  $('bt-name').innerHTML = `${mon.name}<small>${rareText(mon)}</small>`;
+  $('qcard').classList.remove('dim');
+  renderHearts(); renderGauge();
+  setMsg(mon.rar === 4 ? `でんせつの ${mon.name}が あらわれた！` : `${mon.name}が とびだして きた！`);
+  Snd.play(mon.rar === 4 ? 'legend' : 'appear');
+  Music.request(mon.rar === 4 ? 'legend' : 'battle');
+  setTimeout(() => { if (B && B.mon === mon) Snd.cry(mon.id); }, mon.rar === 4 ? 700 : 420);
+  nextQuestion();
+}
+
+function renderHearts(lostIndex) {
+  $('bt-hearts').innerHTML = [0, 1, 2].map(i => `<span class="${i === lostIndex ? 'lost' : ''}">${HEART(i < B.hearts)}</span>`).join('');
+  $('bt-hearts').setAttribute('aria-label', `のこりチャンス ${B.hearts}かい`);
+}
+function renderGauge(pop) {
+  $('bt-gauge').innerHTML = Array.from({ length: B.need }, (_, i) => `<span class="seg${i < B.got ? ' on' : ''}${pop && i === B.got - 1 ? ' pop' : ''}"></span>`).join('');
+}
+
+function nextQuestion() {
+  let t;
+  do { t = pick(B.area.topics); } while (B.area.topics.length > 1 && t === B.lastTopic);
+  B.lastTopic = t;
+  B.q = Q[t]();
+  B.locked = false;
+  const q = B.q;
+  $('q-topic').textContent = TOPICS[q.topic];
+  $('q-hint').hidden = true;
+  $('q-hint').innerHTML = q.hint;
+  $('q-label').textContent = q.label;
+  $('q-expr').innerHTML = q.prompt;
+  const box = $('q-choices');
+  box.className = 'choices' + (q.wide ? ' wide' : q.choices.length === 3 ? ' three' : '');
+  box.innerHTML = q.choices.map((c, i) => `<button class="choice" data-i="${i}"><span class="kbd">${i + 1}</span>${c.html}</button>`).join('');
+  $('q-explain').hidden = true;
+  $('q-stamp').hidden = true;
+}
+
+async function answer(i) {
+  if (!B || B.locked) return;
+  B.locked = true;
+  const me = B;
+  const q = B.q, c = q.choices[i];
+  const st = save.stats[q.topic] || (save.stats[q.topic] = { c: 0, t: 0 });
+  st.t++;
+  const btns = [...$('q-choices').children];
+  btns.forEach(b => { b.disabled = true; });
+  const inner = $('bt-mon-inner');
+  if (c.ok) {
+    st.c++; persist();
+    B.got++; B.streak++;
+    btns[i].classList.add('correct');
+    const stamp = $('q-stamp'); stamp.innerHTML = hanamaru(); stamp.hidden = false;
+    Snd.play('ok');
+    renderGauge(true);
+    inner.className = 'mon-inner'; void inner.offsetWidth; inner.classList.add('hop');
+    const left = B.need - B.got;
+    if (left <= 0) setMsg('ゲットの チャンス！');
+    else setMsg(pick(OK_MSG).replace('{n}', B.mon.name) + (B.streak >= 3 ? ` ${B.streak}もん れんぞく せいかい！` : ` あと ${left}もん`));
+    await sleep(1200);
+    if (B !== me) return;
+    if (B.got >= B.need) capture(); else nextQuestion();
+  } else {
+    persist();
+    B.hearts--; B.streak = 0;
+    btns[i].classList.add('wrong');
+    btns[q.choices.findIndex(x => x.ok)].classList.add('reveal');
+    Snd.play('ng');
+    setTimeout(() => Snd.play('heart'), 380);
+    inner.className = 'mon-inner'; void inner.offsetWidth; inner.classList.add('shake');
+    renderHearts(B.hearts);
+    setMsg(B.hearts > 0 ? `${B.mon.name}は すこし はなれた…（のこり チャンス ${B.hearts}かい）` : `${B.mon.name}が にげそうだ！`);
+    $('ex-answer').innerHTML = q.choices.find(x => x.ok).html;
+    $('ex-steps').innerHTML = q.steps.map(s => `<li>${s}</li>`).join('');
+    $('ex-next').textContent = B.hearts > 0 ? 'わかった！ つぎの もんだい' : 'わかった！';
+    $('q-explain').hidden = false;
+    $('q-explain').scrollIntoView({ block: 'nearest', behavior: reduceMotion() ? 'auto' : 'smooth' });
+    $('ex-next').focus({ preventScroll: true });
+  }
+}
+
+async function capture() {
+  B.locked = true;
+  const me = B, mon = B.mon;
+  $('qcard').classList.add('dim');
+  $('q-stamp').hidden = true;
+  Music.request(null);
+  setMsg('まほうのビンを なげた！');
+  const jar = $('bt-jar');
+  jar.innerHTML = JAR_SVG; jar.hidden = false; jar.className = 'jar'; void jar.offsetWidth; jar.classList.add('throw');
+  Snd.play('throw');
+  await sleep(680);
+  if (B !== me) return;
+  $('bt-mon').classList.add('suck'); Snd.play('suck');
+  await sleep(600);
+  if (B !== me) return;
+  jar.classList.remove('throw');
+  for (let k = 0; k < 3; k++) {
+    jar.classList.remove('wobble'); void jar.offsetWidth; jar.classList.add('wobble');
+    Snd.play('tick'); setMsg('…'.repeat(k + 1));
+    await sleep(680);
+    if (B !== me) return;
+  }
+  jar.classList.remove('wobble'); jar.classList.add('glow');
+  $('bt-burst').innerHTML = Array.from({ length: 8 }, (_, k) => {
+    const a = k * Math.PI / 4;
+    return `<i style="--dx:${Math.round(Math.cos(a) * 80)}px;--dy:${Math.round(Math.sin(a) * 70)}px"><svg viewBox="0 0 20 20"><path d="${starPath(10, 10, 9, 3.5, 4)}" fill="#ffe14d" stroke="${K}" stroke-width="1.3"/></svg></i>`;
+  }).join('');
+  if (!Music.jingle('victory')) Snd.play('get');
+  const first = !save.caught[mon.id];
+  const beforeNormal = normalCaught();
+  save.caught[mon.id] = (save.caught[mon.id] || 0) + 1; persist();
+  setMsg(`やった！ ${mon.name}を つかまえた！`);
+  await sleep(800);
+  if (B !== me) return;
+  let notice = '';
+  if (caughtKinds() === MONS.length && first) notice = 'ずかん コンプリート！ おめでとう！ 分数マスターだ！';
+  else if (beforeNormal < UNLOCK && normalCaught() >= UNLOCK) notice = '「ほしぞらのとう」への みちが ひらいた！';
+  openModal(`
+    <p class="get-title">ゲット！</p>
+    ${first ? '<span class="new-badge">NEW！ ずかんに とうろく</span>' : ''}
+    <div class="big-mon">${monSVG(mon.id)}</div>
+    <span class="mon-no">No.${pad3(mon.no)}</span>
+    <h2 class="mon-name">${mon.name}</h2>
+    <div class="chips">${typeChip(mon)}<span class="rare">${rareText(mon)}</span></div>
+    <p class="mon-desc">${mon.desc}</p>
+    ${notice ? `<p class="notice">${notice}</p>` : ''}
+    <div class="modal-actions"><button class="btn primary" data-act="again">つづけて さがす</button><button class="btn" data-act="map">マップに もどる</button></div>`);
+}
+
+async function flee() {
+  B.locked = true;
+  const me = B;
+  $('qcard').classList.add('dim');
+  $('bt-mon').classList.add('flee');
+  Music.request(null);
+  Snd.play('flee');
+  setTimeout(() => { if (B === me) Music.jingle('lose'); }, 650);
+  setMsg(`${B.mon.name}は にげて しまった…`);
+  await sleep(900);
+  if (B !== me) return;
+  openModal(`
+    <p class="get-title sad">ざんねん…</p>
+    <div class="big-mon sil">${monSVG(B.mon.id)}</div>
+    <p class="mon-desc">${B.mon.name}は にげて しまった。とき方を おもいだして、もういちど チャレンジしよう！</p>
+    <div class="modal-actions"><button class="btn primary" data-act="again">もういちど さがす</button><button class="btn" data-act="map">マップに もどる</button></div>`);
+}
+
+function goHome() { B = null; closeModal(); renderHome(); show('home'); }
+
+// ===== モーダル =====
+function openModal(html) {
+  $('modal-card').innerHTML = html;
+  $('modal').hidden = false;
+  const b = $('modal-card').querySelector('button');
+  if (b) b.focus({ preventScroll: true });
+}
+function closeModal() { $('modal').hidden = true; $('modal-card').innerHTML = ''; }
+
+// ===== ずかん =====
+function renderZukan() {
+  $('zk-count').textContent = `${caughtKinds()} / ${MONS.length}`;
+  $('zk-grid').innerHTML = MONS.map(m => {
+    const c = save.caught[m.id] || 0;
+    if (c) return `<button class="zk-card" data-id="${m.id}"><span class="no">No.${pad3(m.no)}</span>${monSVG(m.id)}<span class="nm">${m.name}</span><span class="ct">つかまえた ${c}かい</span></button>`;
+    const areaName = AREAS.find(a => a.id === m.area).name;
+    if (save.seen[m.id]) return `<div class="zk-card unknown sil"><span class="no">No.${pad3(m.no)}</span>${monSVG(m.id)}<span class="nm">${m.name}</span><span class="ct">見つけた（まだ つかまえて いない）</span></div>`;
+    return `<div class="zk-card unknown"><span class="no">No.${pad3(m.no)}</span><div class="q-mark">？</div><span class="nm">？？？</span><span class="ct">${areaName}に いるらしい</span></div>`;
+  }).join('');
+  let C = 0, T = 0;
+  const rows = Object.keys(TOPICS).map(t => {
+    const s = save.stats[t] || { c: 0, t: 0 };
+    C += s.c; T += s.t;
+    const pct = s.t ? Math.round(s.c / s.t * 100) : 0;
+    return `<div class="rec-row"><span>${TOPICS[t]}</span><span class="rec-bar"><i class="${pct < 50 ? 'low' : pct < 80 ? 'mid' : ''}" style="width:${pct}%"></i></span><span class="rec-num">${s.t ? `${s.c}/${s.t}` : 'まだ'}</span></div>`;
+  });
+  $('rec-total').textContent = T ? `こたえた もんだい ${T}もん・せいかい ${C}もん（${Math.round(C / T * 100)}%）` : 'まだ もんだいに こたえて いないよ。';
+  $('rec-list').innerHTML = rows.join('');
+  renderReset(false);
+}
+function renderReset(confirming) {
+  $('reset-box').innerHTML = confirming
+    ? `<span>ずかんと きろくを ぜんぶ けしますか？</span><button class="btn small" data-reset="yes">けす</button><button class="btn small primary" data-reset="no">やめる</button>`
+    : `<button class="link-btn" data-reset="ask">ずかんと きろくを けす</button>`;
+}
+function openDetail(id) {
+  const m = MON[id];
+  openModal(`
+    <span class="mon-no">No.${pad3(m.no)}</span>
+    <div class="big-mon">${monSVG(m.id)}</div>
+    <h2 class="mon-name">${m.name}</h2>
+    <div class="chips">${typeChip(m)}<span class="rare">${rareText(m)}</span></div>
+    <p class="mon-desc">${m.desc}</p>
+    <p class="mon-meta">すみか：${AREAS.find(a => a.id === m.area).name}　／　つかまえた かず：${save.caught[m.id] || 0}</p>
+    <div class="modal-actions"><button class="btn primary" data-act="close">とじる</button></div>`);
+}
+
+// ===== イベント =====
+$('areas').addEventListener('click', e => { const b = e.target.closest('[data-area]'); if (b) startBattle(b.dataset.area); });
+$('btn-zukan').addEventListener('click', () => { renderZukan(); show('zukan'); });
+$('btn-zk-back').addEventListener('click', () => { renderHome(); show('home'); });
+$('btn-sound').addEventListener('click', () => { save.sound = !save.sound; persist(); updateAudioUI(); if (save.sound) Snd.play('ok'); });
+function toggleBgm() {
+  save.bgm = !save.bgm; persist();
+  if (!save.bgm) Music.stop(); else { AudioEngine.ensure(); Music.sync(); }
+  updateAudioUI();
+}
+$('btn-bgm').addEventListener('click', toggleBgm);
+$('btn-bgm-b').addEventListener('click', toggleBgm);
+function updateAudioUI() {
+  const set = (id, on, label) => { const b = $(id); if (!b) return; if (label) b.textContent = label; b.setAttribute('aria-pressed', on ? 'true' : 'false'); };
+  set('btn-bgm', save.bgm, save.bgm ? 'BGM：ON' : 'BGM：OFF');
+  set('btn-sound', save.sound, save.sound ? '効果音：ON' : '効果音：OFF');
+  set('btn-bgm-b', save.bgm);
+  $('btn-bgm-b').setAttribute('aria-label', save.bgm ? 'BGMを とめる' : 'BGMを ながす');
+  // 表示を消しても場所は残す（消すと画面がずれて、押したボタンが反応しなくなるため）
+  $('audio-note').style.visibility = (!(save.bgm || save.sound) || AudioEngine.running()) ? 'hidden' : 'visible';
+}
+// 最初に画面をさわったときに音を使えるようにする（ブラウザの決まり）
+function unlockAudio() { if (AudioEngine.ensure()) { Music.sync(); updateAudioUI(); } }
+document.addEventListener('pointerdown', e => {
+  unlockAudio();
+  if (e.target.closest('.btn, .zk-card') && !e.target.closest('#btn-sound')) Snd.play('tap');
+}, { passive: true });
+document.addEventListener('keydown', unlockAudio);
+document.addEventListener('visibilitychange', () => {
+  const c = AudioEngine.ctx; if (!c) return;
+  if (document.hidden) c.suspend().catch(() => {});
+  else c.resume().then(() => { Music.sync(); updateAudioUI(); }).catch(() => {});
+});
+$('btn-leave').addEventListener('click', goHome);
+$('q-choices').addEventListener('click', e => { const b = e.target.closest('.choice'); if (b) answer(+b.dataset.i); });
+$('q-hint-btn').addEventListener('click', () => { const h = $('q-hint'); h.hidden = !h.hidden; if (!h.hidden) Snd.play('hint'); });
+$('ex-next').addEventListener('click', () => {
+  if (!B) return;
+  if (B.hearts <= 0) { flee(); return; }
+  nextQuestion();
+  $('qcard').scrollIntoView({ block: 'nearest', behavior: reduceMotion() ? 'auto' : 'smooth' });
+});
+$('modal-card').addEventListener('click', e => {
+  const b = e.target.closest('[data-act]'); if (!b) return;
+  const act = b.dataset.act;
+  if (act === 'close') closeModal();
+  else if (act === 'map') goHome();
+  else if (act === 'again') { const areaId = B ? B.area.id : 'meadow'; closeModal(); startBattle(areaId); }
+});
+$('zk-grid').addEventListener('click', e => { const b = e.target.closest('[data-id]'); if (b) openDetail(b.dataset.id); });
+$('reset-box').addEventListener('click', e => {
+  const b = e.target.closest('[data-reset]'); if (!b) return;
+  const v = b.dataset.reset;
+  if (v === 'ask') renderReset(true);
+  else if (v === 'no') renderReset(false);
+  else { save = { caught: {}, seen: {}, stats: {}, sound: save.sound, bgm: save.bgm }; persist(); renderZukan(); }
+});
+document.addEventListener('keydown', e => {
+  if (!$('modal').hidden) {
+    if (e.key === 'Escape' && $('modal-card').querySelector('[data-act="close"]')) closeModal();
+    return;
+  }
+  if ($('scr-battle').hidden || !B || B.locked) return;
+  const n = parseInt(e.key, 10);
+  if (n >= 1 && n <= B.q.choices.length) { e.preventDefault(); answer(n - 1); }
+});
+
+// ===== はじめる =====
+function boot() {
+  loadSave();
+  renderHome();
+  show('home');
+}
+boot();
+</script>
+</body>
+</html>
