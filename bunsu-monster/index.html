@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>ぶんすうモンスター</title>
-<meta name="description" content="小学5年生の分数の問題に正解して、モンスターをつかまえよう！">
+<meta name="description" content="小学4・5年生の分数の問題に正解して、モンスターをつかまえよう！">
 <meta name="theme-color" content="#f5f9f7">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -220,6 +220,22 @@ h1,h2,h3{text-wrap:balance}
 .reset{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-weight:700;font-size:.9rem}
 .link-btn{background:none;border:none;color:var(--muted);text-decoration:underline;font-weight:700;cursor:pointer;font-size:.85rem;padding:4px}
 
+/* ---------- 学年ごとのステージ・4年生の問題 ---------- */
+.grade{margin-top:22px}
+.grade:first-child{margin-top:0}
+.grade-title{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0;font-family:var(--font-display);font-weight:400;font-size:1.2rem}
+.grade-badge{font-family:var(--font-body);font-weight:900;font-size:.8rem;background:var(--ink);color:#fff;border-radius:999px;padding:.1em .8em}
+.grade-sub{margin:2px 0 10px;font-size:.85rem;font-weight:700;color:var(--muted)}
+.stage-no{position:absolute;top:8px;left:8px;background:var(--card);border:2px solid var(--ink);border-radius:999px;padding:0 .7em;font-weight:900;font-size:.78rem;line-height:1.6}
+.tape{display:block;width:min(100%,300px);height:auto;overflow:visible}
+.tape.sm{width:min(100%,210px)}
+.tape-fig{display:grid;gap:6px;margin:4px 0;justify-items:start}
+.q-word{font-size:.72em}
+.zk-sec{grid-column:1/-1;display:flex;align-items:center;gap:8px;margin:12px 0 0;font-family:var(--font-display);font-weight:400;font-size:1.1rem}
+.zk-sec:first-child{margin-top:0}
+.zk-sec span{font-family:var(--font-body);font-weight:900;font-size:.85rem;background:var(--marker-2);border:2px solid var(--ink);border-radius:999px;padding:0 .7em;font-variant-numeric:tabular-nums}
+.rec-grade{margin:12px 0 2px;font-weight:900;font-size:.9rem}
+
 @media (max-width:420px){
   .choice{min-height:70px}
   .hearts svg{width:24px;height:24px}
@@ -242,14 +258,14 @@ h1,h2,h3{text-wrap:balance}
       <h1 class="logo" aria-label="ぶんすうモンスター"><span class="ln">ぶんすう</span><span class="ld">モンスター</span></h1>
       <p class="tagline">分数の もんだいに せいかいして、モンスターを つかまえよう！</p>
       <div class="home-bar">
-        <button class="btn primary" id="btn-zukan">ずかんを 見る <span id="zukan-count">0/13</span></button>
+        <button class="btn primary" id="btn-zukan">ずかんを 見る <span id="zukan-count">0/26</span></button>
         <button class="btn small" id="btn-bgm" aria-pressed="true">BGM：ON</button>
         <button class="btn small" id="btn-sound" aria-pressed="true">効果音：ON</button>
       </div>
       <p class="audio-note" id="audio-note">画面を タップすると BGMが はじまるよ</p>
     </header>
     <h2 class="sec-title">どこへ いく？</h2>
-    <div class="areas" id="areas"></div>
+    <div id="areas"></div>
     <section class="howto">
       <h2>あそびかた</h2>
       <ol>
@@ -258,7 +274,7 @@ h1,h2,h3{text-wrap:balance}
         <li>せいかいすると ゲットゲージが たまる。いっぱいに なったら ゲット！</li>
         <li>3かい まちがえると にげられちゃう。まちがえたら とき方を 見て おぼえよう</li>
       </ol>
-      <p class="parent">おうちの方へ：小学5年生で習う分数（等しい分数・約分・わり算と分数・通分・大小くらべ・分母がちがう分数のたし算とひき算・帯分数の計算・分数と小数・3つの分数の計算）を出題します。問題は毎回ランダムに作られ、まちがえると解き方が表示されます。ずかんと記録はこのブラウザに保存されます。BGMと効果音はボタンでON・OFFできます（iPhone・iPadはマナーモードだと音が出ないことがあります）。</p>
+      <p class="parent">おうちの方へ：4年生の分数の復習（分数のしくみ・真分数／仮分数／帯分数・仮分数と帯分数のなおし方・大きさの等しい分数・分母が同じ分数のたし算とひき算）と、小学5年生で習う分数（等しい分数・約分・わり算と分数・通分・大小くらべ・分母がちがう分数のたし算とひき算・帯分数の計算・分数と小数・3つの分数の計算）を出題します。4年生のステージは約分を使わずに答えられる問題です。問題は毎回ランダムに作られ、まちがえると解き方が表示されます。ずかんと記録はこのブラウザに保存されます。BGMと効果音はボタンでON・OFFできます（iPhone・iPadはマナーモードだと音が出ないことがあります）。</p>
     </section>
   </section>
 
@@ -388,8 +404,18 @@ function convStep(a, b, L) {
 const TOPICS = {
   equiv: '等しい分数', reduce: '約分', divfrac: 'わり算と分数',
   common: '通分', compare: '大小くらべ', add: 'たし算', sub: 'ひき算',
-  madd: '帯分数のたし算', msub: '帯分数のひき算', decimal: '小数と分数', three: '3つの分数'
+  madd: '帯分数のたし算', msub: '帯分数のひき算', decimal: '小数と分数', three: '3つの分数',
+  // 4年生の ふくしゅう
+  tape: 'テープ図', unit: '分数のいくつ分', kinds: '分数のしゅるい', cmp4: '大小くらべ',
+  toMixed: '仮分数→帯分数', toImp: '帯分数→仮分数', cmpMix: '仮分数と帯分数', same4: '等しい分数',
+  add4: 'たし算', sub4: 'ひき算', madd4: '帯分数のたし算', msub4: '帯分数のひき算'
 };
+const TOPIC_GROUPS = [
+  { grade: 4, keys: ['tape', 'unit', 'kinds', 'cmp4', 'toMixed', 'toImp', 'cmpMix', 'same4', 'add4', 'sub4', 'madd4', 'msub4'] },
+  { grade: 5, keys: ['equiv', 'reduce', 'divfrac', 'common', 'compare', 'add', 'sub', 'madd', 'msub', 'decimal', 'three'] }
+];
+const TOPIC_GRADE = Object.fromEntries(TOPIC_GROUPS.flatMap(g => g.keys.map(k => [k, g.grade])));
+const topicName = t => (TOPIC_GRADE[t] === 4 ? '4年・' : '') + TOPICS[t];
 const Q = {};
 
 Q.equiv = () => {
@@ -650,6 +676,298 @@ Q.three = () => {
     choices: makeChoices(correct, [numSum > 0 ? cF(numSum, b + d + f) : null, allPlus], [S !== sn && sd !== 1 ? cF(S, L, { eq: true }) : null, near(1), near(-1), near(2)], { fill: () => near(R(-4, 5)) }),
     steps, hint: '3つ まとめて 分母を そろえよう',
     meta: { kind: 'frac', expect: [S, L], reduced: true }
+  };
+};
+
+// ===== 4年生の ふくしゅう =====
+// 4年生では約分を習わないので、答えは分母をそろえたままの形で出す（1より大きい答えは帯分数、わりきれるときは整数）
+const cAns4 = (n, d) => n % d === 0 ? cI(n / d) : cF(n, d, { mixed: true });
+const fill4 = (n, d, opt = {}) => () => {
+  const a = n + pick([-3, -2, -1, 1, 2, 3]);
+  if (a <= 0) return null;
+  if (a % d === 0) return opt.int ? cI(a / d) : null;
+  return cF(a, d, { mixed: opt.mixed });
+};
+const wsub = (x, y) => y ? `${x} ${MINUS} ${y} = ${x - y}` : `${x}`;
+const cmpChoices = (left, right, ans) => [{ html: left, key: 'L', val: 'L' }, { html: right, key: 'R', val: 'R' }, { html: 'おなじ', key: 'E', val: 'E' }]
+  .map(o => ({ ...o, ok: o.key === ans }));
+
+// テープ図：1本が 1（1m）を d こに 分けたもの。はじめから n こ分に 色を ぬる
+function tapeSVG(n, d, small) {
+  const bars = Math.max(1, Math.ceil(n / d));
+  const W = 240, H = small ? 18 : 26, G = small ? 6 : 10, unit = small ? '1' : '1m';
+  let s = '';
+  for (let b = 0; b < bars; b++) {
+    const y = 2 + b * (H + G);
+    for (let i = 0; i < d; i++) s += `<rect x="${(2 + i * W / d).toFixed(2)}" y="${y}" width="${(W / d).toFixed(2)}" height="${H}" fill="${b * d + i < n ? '#ffd43b' : '#fff'}" stroke="${K}" stroke-width="1.5"/>`;
+    s += `<rect x="2" y="${y}" width="${W}" height="${H}" fill="none" stroke="${K}" stroke-width="3"/>`;
+    s += `<text x="${W + 10}" y="${y + H / 2}" dominant-baseline="central" font-size="${small ? 14 : 17}" font-weight="900" fill="${K}">${unit}</text>`;
+  }
+  return `<svg class="tape${small ? ' sm' : ''}" viewBox="0 0 ${W + 44} ${4 + bars * H + (bars - 1) * G}" role="img" aria-label="${unit}を ${d}こに 分けた テープ ${bars}本。${n}こ分に 色が ついている">${s}</svg>`;
+}
+const tapeFig = (...pairs) => `<span class="tape-fig">${pairs.map(([n, d]) => tapeSVG(n, d, true)).join('')}</span>`;
+
+Q.tape = () => {
+  const d = pick([2, 3, 4, 5, 6, 8]);
+  let n; do { n = R(1, 2 * d - 1); } while (n === d);
+  const over = n > d, mixed = over && Math.random() < 0.5;
+  const steps = [`1m を ${d}こに 分けた 1こ分は ${F(1, d)}m`, `色の ついた ところは ${F(1, d)}m の ${n}こ分 → ${F(n, d)}m`];
+  if (over) steps.push(`1m と ${F(n - d, d)}m を あわせて ${M(1, n - d, d)}m とも あらわせる`);
+  const prim = over ? [cF(n, 2 * d), cF(n - d, d)] : [cF(d - n, d), cF(n, d - n)];
+  const sec = over ? [cF(2 * d - n, d), cF(n + 1, d, { mixed }), cF(n - 1, d, { mixed }), cF(d, n)] : [cF(1, d), cF(n, d + 1), cF(n + 1, d), n > 1 ? cF(n - 1, d) : null];
+  return {
+    topic: 'tape', label: over ? `色の ついた 長さは 何m？（${mixed ? '帯分数' : '仮分数'}で）` : '色の ついた 長さは 何m？',
+    prompt: tapeSVG(n, d),
+    choices: makeChoices(cF(n, d, { mixed }), prim, sec, { fill: () => cF(R(1, 2 * d - 1), pick([d, d, d + 1, 2 * d]), { mixed }) }),
+    steps, hint: '1m を いくつに 分けて いるかな？ 色の ついた ところは その いくつ分？'
+  };
+};
+
+Q.unit = () => {
+  const d = R(3, 9), v = R(0, 2);
+  if (v === 0) {
+    const n = R(2, d + 3);
+    const steps = [`${F(1, d)} が ${n}こ あつまると、分子が ${n} → ${F(n, d)}`];
+    if (n % d === 0) steps.push(`${F(n, d)} は ${n / d} と おなじ`);
+    return {
+      topic: 'unit', label: '分数で あらわすと？',
+      prompt: `${F(1, d)}<span class="and">の</span>${I(n)}<span class="and">こ分</span>`,
+      choices: makeChoices(n % d === 0 ? cI(n / d) : cF(n, d), [cF(d, n), cF(1, d + n)], [cF(n + 1, d), cF(n - 1, d), cF(n, d + n), cF(n, d + 1)], { fill: fill4(n, d) }),
+      steps, hint: `${F(1, d)} を ${n}こ あつめると、分子は いくつ？`
+    };
+  }
+  if (v === 1) {
+    const n = R(2, d + 3);
+    return {
+      topic: 'unit', label: '□に あてはまる 数は？',
+      prompt: `${F(n, d)}<span class="and">は</span>${F(1, d)}<span class="and">の</span>${BOX}<span class="and">こ分</span>`,
+      choices: makeChoices(cN(n), [cN(d)], [cN(n + 1), cN(n - 1), cN(n + d), cN(Math.abs(d - n))], { fill: () => cN(n + R(-3, 4)) }),
+      steps: [`${F(n, d)} の 分子 ${n} は、${F(1, d)} が いくつ あるかを あらわす`, `だから ${F(1, d)} の ${n}こ分`],
+      hint: '分子は 何を あらわして いたかな？'
+    };
+  }
+  const W = R(1, 3), N = W * d;
+  return {
+    topic: 'unit', label: '□に あてはまる 数は？',
+    prompt: `${I(W)}<span class="and">は</span>${F(1, d)}<span class="and">の</span>${BOX}<span class="and">こ分</span>`,
+    choices: makeChoices(cN(N), [W > 1 ? cN(d) : cN(d + 1), cN(W + d)], [cN(N + 1), cN(N - 1), cN(N + d), cN(W)], { fill: () => cN(N + R(-4, 5)) }),
+    steps: [`1 = ${F(d, d)} だから、1 は ${F(1, d)} の ${d}こ分`].concat(W > 1 ? [`${W} は その ${W}ばい：${d} × ${W} = ${N}こ分`] : []),
+    hint: `1 は ${F(1, d)} の いくつ分かな？`
+  };
+};
+
+Q.kinds = () => {
+  const KINDS = ['真分数', '仮分数', '帯分数'];
+  const target = pick(KINDS);
+  const make = k => {
+    const d = R(2, 9);
+    if (k === '真分数') return cF(R(1, d - 1), d);
+    if (k === '仮分数') {
+      const n = Math.random() < 0.2 ? d : R(d + 1, 3 * d);
+      return n % d === 0 ? { html: F(n, d), key: `f${n}/${d}`, val: [n, d] } : cF(n, d);
+    }
+    return cF(R(1, 3) * d + R(1, d - 1), d, { mixed: true });
+  };
+  const others = KINDS.filter(k => k !== target);
+  const correct = make(target);
+  const HINT = { 真分数: '分子が 分母より 小さい ものを さがそう', 仮分数: '分子が 分母と おなじか、分母より 大きい ものを さがそう', 帯分数: '整数と 分数が くっついている ものを さがそう' };
+  return {
+    topic: 'kinds', label: 'なかまわけ',
+    prompt: `<span class="q-word">${target}は どれ？</span>`,
+    choices: makeChoices(correct, [make(others[0]), make(others[1])], [make(others[0]), make(others[1]), make(others[0]), make(others[1])], { fill: () => make(pick(others)) }),
+    steps: ['<b>真分数</b>：分子が 分母より 小さい 分数（1より 小さい）', '<b>仮分数</b>：分子と 分母が おなじか、分子が 分母より 大きい 分数（1と おなじか 1より 大きい）', '<b>帯分数</b>：整数と 真分数を あわせた 分数', `${correct.html} は ${target}`],
+    hint: HINT[target]
+  };
+};
+
+Q.cmp4 = () => {
+  let a, b, c, d, steps, hint;
+  if (Math.random() < 0.5) {
+    b = d = R(3, 12);
+    do { a = R(1, d + 2); c = R(1, d + 2); } while (a === c);
+    const hi = Math.max(a, c), lo = Math.min(a, c);
+    steps = ['分母が おなじ ときは、分子が 大きい ほうが 大きい', `${hi} ＞ ${lo} だから ${F(hi, d)} の ほうが 大きい`];
+    hint = '分母が おなじ ときは どこを くらべる？';
+  } else {
+    const n = R(1, 3);
+    do { b = R(2, 10); d = R(2, 10); } while (b === d || n >= Math.min(b, d));
+    a = c = n;
+    const s = Math.min(b, d), l = Math.max(b, d);
+    steps = ['分子が おなじ ときは、1こ分の 大きさを くらべる', `${F(1, s)} は 1を ${s}こに 分けた 1こ分、${F(1, l)} は ${l}こに 分けた 1こ分`, tapeFig([n, s], [n, l]),
+      `分ける 数が 少ない ほうが 1こ分が 大きいので、${F(n, s)} の ほうが 大きい`];
+    hint = '1を いくつに 分けて いるかな？ 分ける 数が 多いと 1こ分は どうなる？';
+  }
+  if (Math.random() < 0.5) [a, b, c, d] = [c, d, a, b];
+  return {
+    topic: 'cmp4', label: '大きいのは どっち？',
+    prompt: `${F(a, b)}<span class="and">と</span>${F(c, d)}`,
+    choices: cmpChoices(F(a, b), F(c, d), a * d > c * b ? 'L' : 'R'), steps, hint
+  };
+};
+
+Q.toMixed = () => {
+  const d = R(2, 9);
+  let n; do { n = R(d + 1, 4 * d); } while (n % d === 0 && Math.random() < 0.7);
+  const q = Math.floor(n / d), r = n % d;
+  const mx = (w, rr, dd) => (w >= 1 && rr > 0 && rr < dd) ? cF(w * dd + rr, dd, { mixed: true }) : null;
+  const correct = r === 0 ? cI(q) : mx(q, r, d);
+  return {
+    topic: 'toMixed', label: '帯分数か 整数に なおすと？',
+    prompt: F(n, d),
+    choices: makeChoices(correct, [r > 0 && q < d ? mx(r, q, d) : null, r > 0 ? mx(q, r, n) : null],
+      [mx(q + 1, r || 1, d), mx(q - 1, r || 1, d), r > 0 ? mx(q, d - r, d) : null, mx(q, r + 1, d), r === 0 ? cI(q + 1) : null, r === 0 && q > 1 ? cI(q - 1) : null],
+      { fill: () => { const dd = Math.random() < 0.7 ? d : d + 1; return mx(q + R(-2, 2), R(1, dd - 1), dd); } }),
+    steps: [`${n} ÷ ${d} = ${q}${r ? ` あまり ${r}` : ''}`,
+      r ? `わった 答えの ${q} が 整数、あまりの ${r} が 分子に なる（${F(d, d)} = 1 が ${q}こ と ${F(r, d)}）` : `わりきれたので 整数の ${q} に なる`,
+      `${F(n, d)} = ${correct.html}`],
+    hint: '分子 ÷ 分母 を 計算して みよう'
+  };
+};
+
+Q.toImp = () => {
+  const d = R(2, 9), W = R(1, 4), r = R(1, d - 1), N = W * d + r;
+  return {
+    topic: 'toImp', label: '仮分数に なおすと？',
+    prompt: M(W, r, d),
+    choices: makeChoices(cF(N, d), [cF(W + r, d), cF(W * r + d, d)], [cF(N + d, d), cF(N - d, d), cF(N + 1, d), cF(N - 1, d)],
+      { fill: () => cF(N + R(-2 * d, 2 * d), Math.random() < 0.7 ? d : d + 1) }),
+    steps: [`整数の ${W} は ${F(1, d)} の ${W * d}こ分（${W} × ${d} = ${W * d}）`, `分数の ${F(r, d)} を あわせて ${W * d} + ${r} = ${N}`, `${M(W, r, d)} = ${F(N, d)}`],
+    hint: `整数の ${W} は ${F(1, d)} が いくつ分かな？`
+  };
+};
+
+Q.cmpMix = () => {
+  const d = R(2, 8), W = R(1, 3), intForm = Math.random() < 0.25;
+  const r = intForm ? 0 : R(1, d - 1), N = W * d + r;
+  let m;
+  if (Math.random() < 0.3) m = N; else { do { m = N + pick([-3, -2, -1, 1, 2, 3]); } while (m <= d); }
+  let left = { html: F(m, d), n: m }, right = { html: intForm ? I(W) : M(W, r, d), n: N };
+  if (Math.random() < 0.5) [left, right] = [right, left];
+  const big = left.n > right.n ? left : right, small = big === left ? right : left;
+  const result = m === N ? `どちらも ${F(N, d)} で おなじ 大きさ` : `${big.n} ＞ ${small.n} だから ${big.html} の ほうが 大きい`;
+  return {
+    topic: 'cmpMix', label: '大きいのは どっち？',
+    prompt: `${left.html}<span class="and">と</span>${right.html}`,
+    choices: cmpChoices(left.html, right.html, left.n > right.n ? 'L' : left.n < right.n ? 'R' : 'E'),
+    steps: [intForm ? `${W} を 分母が ${d} の 分数に なおす：${W} = ${F(N, d)}` : `${M(W, r, d)} を 仮分数に なおす：${W} × ${d} + ${r} = ${N} → ${F(N, d)}`,
+      `分母が おなじ なので 分子を くらべる`, result],
+    hint: '仮分数か 帯分数の どちらかに そろえて くらべよう'
+  };
+};
+
+const SAME4 = [[1, 2], [1, 3], [2, 3], [1, 4], [3, 4], [1, 5], [2, 5], [3, 5], [1, 6], [5, 6]];
+Q.same4 = () => {
+  let a, b, k;
+  do { [a, b] = pick(SAME4); k = R(2, 4); } while (b * k > 12);
+  const A = a * k, D = b * k;
+  return {
+    topic: 'same4', label: '大きさの 等しい 分数は？',
+    prompt: `${F(a, b)}<span class="op">=</span>${BOX}`,
+    choices: makeChoices(cF(A, D), [cF(a + k, b + k), cF(a, D)], [cF(A, b), cF(A + 1, D), cF(A - 1, D), cF(a + 1, b + 1), cF(A, D + 1)], { fill: () => cF(A + R(-3, 3), D) }),
+    steps: [tapeFig([a, b], [A, D]), `色の ついた 長さが おなじ だから ${F(a, b)} = ${F(A, D)}`,
+      `${F(1, b)} の 1こ分は ${F(1, D)} の ${k}こ分。だから ${F(a, b)} は ${F(1, D)} の ${a} × ${k} = ${A}こ分`],
+    hint: 'テープや 数直線で、おなじ 長さに なる 分数を さがそう'
+  };
+};
+
+Q.add4 = () => {
+  const d = R(3, 10);
+  let a, c;
+  if (Math.random() < 0.75) { a = R(1, d - 1); c = R(1, d - 1); } else { a = R(d + 1, 2 * d - 1); c = R(1, d - 1); }
+  if (Math.random() < 0.5) [a, c] = [c, a];
+  const S = a + c;
+  const steps = ['分母が おなじ ときは、分母は そのままで 分子どうしを たす', `${F(a, d)} + ${F(c, d)} = ${F(`${a}+${c}`, d)} = ${F(S, d)}`];
+  if (S % d === 0) steps.push(`${F(S, d)} = ${S / d}`);
+  else if (S > d) steps.push(`1より 大きいので 帯分数に なおすと ${FMX(S, d)}`);
+  return {
+    topic: 'add4', label: 'けいさんしよう（1より 大きい 答えは 帯分数で）',
+    prompt: `${F(a, d)}<span class="op">+</span>${F(c, d)}`,
+    choices: makeChoices(cAns4(S, d), [cF(S, 2 * d, { mixed: true })],
+      [a !== c ? cF(Math.abs(a - c), d, { mixed: true }) : null, cAns4(S + 1, d), S > 1 ? cAns4(S - 1, d) : null, cF(S, d + 1, { mixed: true })],
+      { fill: fill4(S, d, { mixed: true, int: true }) }),
+    steps, hint: '分母は たさないよ。分子だけ たそう'
+  };
+};
+
+Q.sub4 = () => {
+  const d = R(3, 10);
+  if (Math.random() < 0.55) {
+    let a, c; do { a = R(2, d + 4); c = R(1, d - 1); } while (a <= c);
+    const S = a - c;
+    const steps = ['分母が おなじ ときは、分母は そのままで 分子どうしを ひく', `${F(a, d)} ${MINUS} ${F(c, d)} = ${F(`${a}${MINUS}${c}`, d)} = ${F(S, d)}`];
+    if (S % d === 0) steps.push(`${F(S, d)} = ${S / d}`);
+    else if (S > d) steps.push(`1より 大きいので 帯分数に なおすと ${FMX(S, d)}`);
+    return {
+      topic: 'sub4', label: 'けいさんしよう（1より 大きい 答えは 帯分数で）',
+      prompt: `${F(a, d)}<span class="op">${MINUS}</span>${F(c, d)}`,
+      choices: makeChoices(cAns4(S, d), [cAns4(a + c, d)], [cAns4(S + 1, d), S > 1 ? cAns4(S - 1, d) : null, cF(c, d), cF(S, 2 * d)], { fill: fill4(S, d, { mixed: true, int: true }) }),
+      steps, hint: '分母は ひかないよ。分子だけ ひこう'
+    };
+  }
+  // 整数 − 分数
+  const W = Math.random() < 0.6 ? 1 : R(2, 3), c = R(1, d - 1), N = W * d, S = N - c;
+  const steps = [`${W} を 分母が ${d} の 分数に なおす：${W} = ${F(N, d)}`, `${F(N, d)} ${MINUS} ${F(c, d)} = ${F(S, d)}`];
+  if (S > d) steps.push(`1より 大きいので 帯分数に なおすと ${FMX(S, d)}`);
+  return {
+    topic: 'sub4', label: 'けいさんしよう（1より 大きい 答えは 帯分数で）',
+    prompt: `${I(W)}<span class="op">${MINUS}</span>${F(c, d)}`,
+    choices: makeChoices(cAns4(S, d), [cF(c, d), c !== W ? cF(Math.abs(c - W), d) : null], [cAns4(S + 1, d), S > 1 ? cAns4(S - 1, d) : null, cF(N + c, d, { mixed: true })], { fill: fill4(S, d, { mixed: true }) }),
+    steps, hint: W === 1 ? `1 = ${F(d, d)} と 考えよう` : `${W} = ${F(N, d)} と 考えよう`
+  };
+};
+
+Q.madd4 = () => {
+  const d = R(3, 9), W1 = R(1, 3), W2 = Math.random() < 0.3 ? 0 : R(1, 2);
+  const a = R(1, d - 1), c = R(1, d - 1), S = a + c, WS = W1 + W2, total = WS * d + S;
+  const correct = cAns4(total, d);
+  const steps = [W2 ? `整数どうし：${W1} + ${W2} = ${WS}` : `整数は ${W1} の まま`, `分数どうし：${F(a, d)} + ${F(c, d)} = ${F(S, d)}`];
+  if (S === d) steps.push(`${F(S, d)} = 1 なので 整数に 1 くり上げる`);
+  else if (S > d) steps.push(`${F(S, d)} は 1より 大きいので 1 くり上げる：${F(S, d)} = ${M(1, S - d, d)}`);
+  steps.push(`こたえ：${correct.html}`);
+  // くり上げを わすれた 形（3と5/4 など）は まちがいの 選択肢に する
+  const raw = S >= d ? { html: M(WS, S, d), key: `raw${WS},${S}`, val: [total, d], eq: true } : null;
+  return {
+    topic: 'madd4', label: 'けいさんしよう',
+    prompt: `${M(W1, a, d)}<span class="op">+</span>${W2 ? M(W2, c, d) : F(c, d)}`,
+    choices: makeChoices(correct, [raw, S > d ? cF(WS * d + S - d, d, { mixed: true }) : S === d ? cI(WS) : null, cF(WS * 2 * d + S, 2 * d, { mixed: true })],
+      [cAns4(total + 1, d), cAns4(total - 1, d), cAns4(total + d, d)], { fill: fill4(total, d, { mixed: true, int: true }) }),
+    steps, hint: '整数どうし、分数どうしで たそう。分数が 1を こえたら くり上げ'
+  };
+};
+
+Q.msub4 = () => {
+  const d = R(3, 9);
+  if (Math.random() < 0.65) {
+    const W1 = R(2, 4), W2 = R(0, W1 - 1);
+    let a, c; do { a = R(1, d - 1); c = R(1, d - 1); } while (a === c);
+    const borrow = a < c;
+    const W = W1 - W2 - (borrow ? 1 : 0), r = borrow ? a + d - c : a - c, total = W * d + r;
+    const correct = cF(total, d, { mixed: true });
+    const steps = [];
+    if (borrow) {
+      steps.push(`${F(a, d)} から ${F(c, d)} は ひけないので、${W1} から 1 くり下げる：${M(W1, a, d)} = ${M(W1 - 1, a + d, d)}`);
+      steps.push(`整数：${wsub(W1 - 1, W2)}　分数：${F(a + d, d)} ${MINUS} ${F(c, d)} = ${F(r, d)}`);
+    } else steps.push(`整数：${wsub(W1, W2)}　分数：${F(a, d)} ${MINUS} ${F(c, d)} = ${F(r, d)}`);
+    steps.push(`こたえ：${correct.html}`);
+    return {
+      topic: 'msub4', label: 'けいさんしよう',
+      prompt: `${M(W1, a, d)}<span class="op">${MINUS}</span>${W2 ? M(W2, c, d) : F(c, d)}`,
+      choices: makeChoices(correct, borrow ? [cF((W1 - W2) * d + (c - a), d, { mixed: true }), cF((W1 - W2) * d + r, d, { mixed: true })] : [W >= 1 ? cF((W - 1) * d + r, d, { mixed: true }) : null],
+        [cAns4(total + 1, d), total > 1 ? cAns4(total - 1, d) : null, cF((W + 1) * d + r, d, { mixed: true })], { fill: fill4(total, d, { mixed: true }) }),
+      steps, hint: borrow ? '分数の ところが ひけない ときは、整数から 1 くり下げよう' : '整数どうし、分数どうしで ひこう'
+    };
+  }
+  // 整数 − 帯分数（または 真分数）
+  const W1 = R(2, 5), W2 = R(0, W1 - 1), c = R(1, d - 1);
+  const W = W1 - 1 - W2, r = d - c, total = W * d + r;
+  const correct = cF(total, d, { mixed: true });
+  return {
+    topic: 'msub4', label: 'けいさんしよう',
+    prompt: `${I(W1)}<span class="op">${MINUS}</span>${W2 ? M(W2, c, d) : F(c, d)}`,
+    choices: makeChoices(correct, [cF((W1 - W2) * d + c, d, { mixed: true }), cF((W1 - W2) * d + r, d, { mixed: true })],
+      [cAns4(total + 1, d), total > 1 ? cAns4(total - 1, d) : null, W >= 1 ? cF(W * d + c, d, { mixed: true }) : null], { fill: fill4(total, d, { mixed: true }) }),
+    steps: [`${W1} を ${M(W1 - 1, d, d)} と 考える（1 = ${F(d, d)}）`, `整数：${wsub(W1 - 1, W2)}　分数：${F(d, d)} ${MINUS} ${F(c, d)} = ${F(r, d)}`, `こたえ：${correct.html}`],
+    hint: '整数から 1 を 分数に なおして ひこう'
   };
 };
 // ===== サウンド：BGM・効果音・鳴き声はすべてオリジナルを WebAudio でその場で合成 =====
@@ -925,7 +1243,20 @@ const CRIES = {
   kazanbo: { w: 'sawtooth', f: 150, seq: [1, 1.3, 0.8], d: 0.14, slide: true },
   housekin: { w: 'triangle', f: 1046, seq: [1, 1.5, 2, 1.5, 2], d: 0.05 },
   hoshipiko: { w: 'p25', f: 784, seq: [1, 1.26, 1.5, 2, 2.52], d: 0.05 },
-  bunsuuryu: { w: 'sawtooth', f: 220, seq: [1, 1.5, 1.33, 2], d: 0.2, slide: true }
+  bunsuuryu: { w: 'sawtooth', f: 220, seq: [1, 1.5, 1.33, 2], d: 0.2, slide: true },
+  donguri: { w: 'triangle', f: 392, seq: [1, 1.25, 1], d: 0.1 },
+  kinopon: { w: 'square', f: 523, seq: [1, 0.84, 1.12], d: 0.09 },
+  konohato: { w: 'p25', f: 1046, seq: [1, 1.2, 1, 1.5], d: 0.06 },
+  hotarun: { w: 'sine', f: 880, seq: [1, 1.5, 2, 1.5, 1], d: 0.07 },
+  kaigaran: { w: 'sine', f: 600, seq: [1, 1.12, 0.9], d: 0.12, slide: true },
+  kanippa: { w: 'square', f: 300, seq: [1, 1, 1.5, 1], d: 0.06 },
+  takorin: { w: 'triangle', f: 440, seq: [1, 1.33, 1.12, 1.5], d: 0.09, slide: true },
+  shiofukin: { w: 'sine', f: 260, seq: [1, 1.5, 1.25], d: 0.18, slide: true },
+  shorton: { w: 'p25', f: 784, seq: [1, 1.25, 1.5], d: 0.07 },
+  puririn: { w: 'sine', f: 520, seq: [1, 1.06, 1, 1.06, 1], d: 0.06 },
+  uzukyan: { w: 'triangle', f: 988, seq: [1, 1.12, 1.25, 1.5], d: 0.06 },
+  chokoban: { w: 'square', f: 330, seq: [1, 1.2, 1.5, 1.2], d: 0.08 },
+  nijikuja: { w: 'sawtooth', f: 330, seq: [1, 1.26, 1.5, 2, 2.5], d: 0.16, slide: true }
 };
 const Snd = {
   tone(f, t0, dur, type = 'square', vol = 0.07, slideTo) {
@@ -985,6 +1316,24 @@ function starPath(cx, cy, R1, r1, n = 5) {
   return d + 'Z';
 }
 const sparkle = (x, y, r, fill = '#fff') => `<path d="${starPath(x, y, r, r * 0.35, 4)}" fill="${fill}" stroke="${K}" stroke-width="1.5" stroke-linejoin="round"/>`;
+function spiralPath(cx, cy, r0, r1, turns, steps = 120) {
+  let d = '';
+  for (let i = 0; i <= steps; i++) {
+    const t = i / steps, a = t * turns * 2 * Math.PI, r = r0 + (r1 - r0) * t;
+    d += (i ? 'L' : 'M') + (cx + r * Math.cos(a)).toFixed(1) + ' ' + (cy + r * Math.sin(a)).toFixed(1) + ' ';
+  }
+  return d;
+}
+// おうぎ形の はねを おなじ 大きさに 分けて ならべる（角度は度。0°が右、270°が真上）
+function fanTail(cx, cy, r, a0, a1, colors) {
+  const step = (a1 - a0) / colors.length, rad = a => a * Math.PI / 180;
+  const P = (a, rr) => `${(cx + rr * Math.cos(rad(a))).toFixed(1)} ${(cy + rr * Math.sin(rad(a))).toFixed(1)}`;
+  return colors.map((c, i) => {
+    const s = a0 + i * step, e = s + step, [ex, ey] = P(s + step / 2, r * 0.78).split(' ');
+    return `<path d="M${cx} ${cy} L${P(s, r)} A${r} ${r} 0 0 1 ${P(e, r)}Z" fill="${c}" stroke="${K}" stroke-width="2.5" stroke-linejoin="round"/>`
+      + `<circle cx="${ex}" cy="${ey}" r="4.5" fill="#fff" stroke="${K}" stroke-width="1.5"/>`;
+  }).join('');
+}
 
 const ART = {
   happamochi: `
@@ -1115,7 +1464,142 @@ const ART = {
     <path d="M60 75 V95" stroke="${K}" stroke-width="2"/>
     ${eye(52, 46, 0.85)}${eye(68, 46, 0.85)}
     <path d="M47 38 L55 40" stroke="${K}" stroke-width="2.5" stroke-linecap="round"/><path d="M73 38 L65 40" stroke="${K}" stroke-width="2.5" stroke-linecap="round"/>
-    ${blush(46, 54, '#ffc7a8')}${blush(74, 54, '#ffc7a8')}${smile(60, 54, 3.5)}`
+    ${blush(46, 54, '#ffc7a8')}${blush(74, 54, '#ffc7a8')}${smile(60, 54, 3.5)}`,
+  // ---- 4年生の せかい ----
+  donguri: `
+    <ellipse cx="47" cy="107" rx="9" ry="5" fill="#8d5a32" ${SW}/><ellipse cx="73" cy="107" rx="9" ry="5" fill="#8d5a32" ${SW}/>
+    <path d="M60 110 C42 106 28 94 28 76 C28 64 40 56 60 56 C80 56 92 64 92 76 C92 94 78 106 60 110Z" fill="#d39a5c" ${SW}/>
+    <ellipse cx="40" cy="80" rx="4.5" ry="9" fill="#fff" opacity=".35" transform="rotate(20 40 80)"/>
+    <rect x="55" y="18" width="10" height="18" rx="5" fill="#6d4528" ${SW}/>
+    <path d="M24 64 C24 44 40 32 60 32 C80 32 96 44 96 64 C96 70 91 72 86 69 C70 62 50 62 34 69 C29 72 24 70 24 64Z" fill="#9a6a3f" ${SW}/>
+    <path d="M36 54 l6 5 6 -5 M54 48 l6 5 6 -5 M72 54 l6 5 6 -5 M45 41 l5 4 5 -4 M65 41 l5 4 5 -4" stroke="#6d4528" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    ${eye(50, 82)}${eye(70, 82)}${blush(40, 92)}${blush(80, 92)}${smile(60, 92, 4.5)}`,
+  kinopon: `
+    <ellipse cx="47" cy="107" rx="9" ry="5" fill="#e8d9b8" ${SW}/><ellipse cx="73" cy="107" rx="9" ry="5" fill="#e8d9b8" ${SW}/>
+    <rect x="36" y="58" width="48" height="48" rx="20" fill="#fff4dc" ${SW}/>
+    <path d="M16 66 C16 38 36 20 60 20 C84 20 104 38 104 66 C104 73 97 75 91 72 C72 65 48 65 29 72 C23 75 16 73 16 66Z" fill="#e84a4a" ${SW}/>
+    <g fill="#fff"><circle cx="40" cy="40" r="7"/><circle cx="64" cy="31" r="6"/><circle cx="86" cy="48" r="7"/><circle cx="28" cy="58" r="4"/><circle cx="58" cy="52" r="5"/></g>
+    ${eye(51, 84)}${eye(69, 84)}${blush(43, 94)}${blush(77, 94)}${mouthO(60, 93, 4)}`,
+  konohato: `
+    <path d="M52 98 V108 M68 98 V108" stroke="#f0a030" stroke-width="4" stroke-linecap="round"/>
+    <path d="M46 109 H56 M64 109 H74" stroke="#f0a030" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M60 48 C54 36 56 24 66 18 C70 28 68 40 60 48Z" fill="#7fd15a" ${SW}/>
+    <path d="M60 48 C56 40 48 36 42 38 C44 46 52 50 60 48Z" fill="#5fb63f" ${SW}/>
+    <circle cx="60" cy="74" r="30" fill="#ffd76e" ${SW}/>
+    <ellipse cx="60" cy="86" rx="17" ry="13" fill="#fff4c8"/>
+    <path d="M33 70 C18 66 10 80 14 94 C26 96 36 86 33 70Z" fill="#5fb84a" ${SW}/>
+    <path d="M30 76 C24 82 20 88 17 92" stroke="#3a7f2b" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M87 70 C102 66 110 80 106 94 C94 96 84 86 87 70Z" fill="#5fb84a" ${SW}/>
+    <path d="M90 76 C96 82 100 88 103 92" stroke="#3a7f2b" stroke-width="2" fill="none" stroke-linecap="round"/>
+    ${eye(49, 70)}${eye(71, 70)}
+    <path d="M55 77 L65 77 L60 84Z" fill="#f0a030" stroke="${K}" stroke-width="2" stroke-linejoin="round"/>
+    ${blush(41, 80)}${blush(79, 80)}`,
+  hotarun: `
+    <circle cx="60" cy="90" r="27" fill="#fff59d" opacity=".55"/>
+    <ellipse cx="36" cy="56" rx="17" ry="10" fill="#e6f4ff" opacity=".95" ${SW} transform="rotate(-25 36 56)"/>
+    <ellipse cx="84" cy="56" rx="17" ry="10" fill="#e6f4ff" opacity=".95" ${SW} transform="rotate(25 84 56)"/>
+    <path d="M52 44 C48 32 42 26 36 24 M68 44 C72 32 78 26 84 24" stroke="${K}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <circle cx="36" cy="24" r="4.5" fill="#ffe14d" stroke="${K}" stroke-width="2"/><circle cx="84" cy="24" r="4.5" fill="#ffe14d" stroke="${K}" stroke-width="2"/>
+    <ellipse cx="50" cy="106" rx="7" ry="4" fill="#3d4a6b" ${SW}/><ellipse cx="70" cy="106" rx="7" ry="4" fill="#3d4a6b" ${SW}/>
+    <ellipse cx="60" cy="92" rx="23" ry="15" fill="#ffe14d" ${SW}/>
+    <path d="M42 92 Q60 98 78 92" stroke="#f2b632" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <circle cx="60" cy="64" r="24" fill="#3d4a6b" ${SW}/>
+    <ellipse cx="60" cy="68" rx="17" ry="13" fill="#ffe0b8"/>
+    ${eye(53, 66, 0.8)}${eye(67, 66, 0.8)}${blush(47, 74, '#ffb3a0')}${blush(73, 74, '#ffb3a0')}${smile(60, 73, 3)}
+    ${sparkle(100, 96, 4, '#fff59d')}${sparkle(20, 92, 3.5, '#fff59d')}`,
+  kaigaran: `
+    <ellipse cx="46" cy="106" rx="9" ry="5" fill="#f7b9a8" ${SW}/><ellipse cx="74" cy="106" rx="9" ry="5" fill="#f7b9a8" ${SW}/>
+    <path d="M60 86 L20 62 C18 38 38 20 60 20 C82 20 102 38 100 62Z" fill="#ffb37a" ${SW}/>
+    <path d="M60 84 L30 38 M60 84 L45 25 M60 84 L60 22 M60 84 L75 25 M60 84 L90 38" stroke="#e8894a" stroke-width="2.5" stroke-linecap="round"/>
+    <ellipse cx="60" cy="84" rx="30" ry="20" fill="#ffd8c8" ${SW}/>
+    ${eye(50, 82)}${eye(70, 82)}${blush(40, 90)}${blush(80, 90)}${smile(60, 90, 4)}
+    <circle cx="98" cy="96" r="6" fill="#fff" ${SW}/><circle cx="96" cy="94" r="1.8" fill="#dfe8ff"/>`,
+  kanippa: `
+    <g stroke="${K}" stroke-width="8" stroke-linecap="round" fill="none"><path d="M34 88 L18 94 M34 96 L20 106 M86 88 L102 94 M86 96 L100 106 M40 72 L28 56 M80 72 L92 56"/></g>
+    <g stroke="#ff7a5c" stroke-width="4" stroke-linecap="round" fill="none"><path d="M34 88 L18 94 M34 96 L20 106 M86 88 L102 94 M86 96 L100 106 M40 72 L28 56 M80 72 L92 56"/></g>
+    <path d="M24 46 L18.5 34.2 A13 13 0 1 0 29.5 34.2Z" fill="#ff7a5c" ${SW}/>
+    <path d="M96 46 L90.5 34.2 A13 13 0 1 0 101.5 34.2Z" fill="#ff7a5c" ${SW}/>
+    <ellipse cx="60" cy="82" rx="32" ry="22" fill="#ff7a5c" ${SW}/>
+    <circle cx="42" cy="74" r="3" fill="#ffb09c"/><circle cx="80" cy="72" r="2.5" fill="#ffb09c"/><circle cx="74" cy="97" r="2.5" fill="#ffb09c"/>
+    <path d="M50 62 V50 M70 62 V50" stroke="${K}" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="50" cy="46" r="8" fill="#fff" ${SW}/><circle cx="70" cy="46" r="8" fill="#fff" ${SW}/>
+    ${eye(51, 47, 0.75)}${eye(69, 47, 0.75)}${blush(42, 86)}${blush(78, 86)}${smile(60, 86, 5)}`,
+  takorin: `
+    ${(() => {
+      const d = [0, 1, 2, 3, 4, 5, 6, 7].map(i => {
+        const x0 = 36 + i * 6.9, xe = 16 + i * 12.6, s = i < 4 ? -1 : 1;
+        return `M${x0.toFixed(1)} 86 Q${((x0 + xe) / 2).toFixed(1)} 112 ${xe.toFixed(1)} 102 q${s * 4} -6 ${s * 8} -2`;
+      }).join(' ');
+      return `<path d="${d}" stroke="${K}" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="${d}" stroke="#f48fb1" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+    })()}
+    <ellipse cx="60" cy="62" rx="32" ry="30" fill="#f48fb1" ${SW}/>
+    <circle cx="40" cy="46" r="4" fill="#f8bbd0"/><circle cx="80" cy="40" r="3" fill="#f8bbd0"/><circle cx="86" cy="58" r="2.5" fill="#f8bbd0"/>
+    <path d="M30 50 Q60 38 90 50" stroke="${K}" stroke-width="10" fill="none" stroke-linecap="round"/>
+    <path d="M30 50 Q60 38 90 50" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round"/>
+    ${eye(49, 64)}${eye(71, 64)}${blush(40, 74)}${blush(80, 74)}
+    <ellipse cx="60" cy="78" rx="4.5" ry="4" fill="#e85d75" stroke="${K}" stroke-width="2"/>`,
+  shiofukin: `
+    <path d="M60 40 V18 M60 40 C56 28 48 22 40 24 M60 40 C64 28 72 22 80 24" stroke="${K}" stroke-width="9" fill="none" stroke-linecap="round"/>
+    <path d="M60 40 V18 M60 40 C56 28 48 22 40 24 M60 40 C64 28 72 22 80 24" stroke="#a9dcfa" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <circle cx="33" cy="31" r="3.5" fill="#a9dcfa" stroke="${K}" stroke-width="2"/><circle cx="87" cy="31" r="3.5" fill="#a9dcfa" stroke="${K}" stroke-width="2"/>
+    <path d="M90 80 C100 72 104 62 110 56 C108 66 110 74 116 78 C108 82 100 84 92 86Z" fill="#4f9de0" ${SW}/>
+    <path d="M16 78 C16 56 36 42 60 42 C84 42 98 58 98 78 C98 96 82 106 58 106 C34 106 16 96 16 78Z" fill="#4f9de0"/>
+    <path d="M22 88 C34 100 80 102 94 88 C92 100 76 106 58 106 C40 106 26 100 22 88Z" fill="#e3f3ff"/>
+    <path d="M36 96 H62 M42 101 H58" stroke="#a9d4f5" stroke-width="2" stroke-linecap="round"/>
+    <path d="M16 78 C16 56 36 42 60 42 C84 42 98 58 98 78 C98 96 82 106 58 106 C34 106 16 96 16 78Z" fill="none" ${SW}/>
+    <ellipse cx="80" cy="90" rx="9" ry="5" fill="#3f86c8" ${SW} transform="rotate(30 80 90)"/>
+    <ellipse cx="42" cy="54" rx="9" ry="4" fill="#fff" opacity=".45"/>
+    ${eye(42, 70)}${eye(64, 70)}${blush(33, 80)}${blush(73, 80)}${smile(53, 80, 4.5)}`,
+  shorton: `
+    <ellipse cx="46" cy="108" rx="9" ry="5" fill="#f2d6a2" ${SW}/><ellipse cx="74" cy="108" rx="9" ry="5" fill="#f2d6a2" ${SW}/>
+    <rect x="24" y="50" width="72" height="56" rx="10" fill="#ffe2a8" ${SW}/>
+    <rect x="25.5" y="70" width="69" height="8" fill="#fff"/>
+    <g fill="#ff4d5e"><circle cx="36" cy="74" r="3"/><circle cx="52" cy="74" r="3"/><circle cx="68" cy="74" r="3"/><circle cx="84" cy="74" r="3"/></g>
+    <path d="M24 62 V58 Q24 50 32 50 H88 Q96 50 96 58 V62 Q92 69 86 63 Q80 70 74 63 Q68 69 62 63 Q56 70 50 63 Q44 69 38 63 Q32 70 24 62Z" fill="#fff" ${SW}/>
+    <path d="M60 50 C50 50 47 40 51 33 C54 28 66 28 69 33 C73 40 70 50 60 50Z" fill="#ff4d5e" ${SW}/>
+    <path d="M53 31 L57 24 L60 29 L63 24 L67 31 Q60 34 53 31Z" fill="#43a047" stroke="${K}" stroke-width="2" stroke-linejoin="round"/>
+    <g fill="#ffe0b2"><circle cx="56" cy="38" r="1.3"/><circle cx="64" cy="38" r="1.3"/><circle cx="60" cy="44" r="1.3"/></g>
+    ${eye(50, 89)}${eye(70, 89)}${blush(40, 98)}${blush(80, 98)}${smile(60, 98, 4)}`,
+  puririn: `
+    <ellipse cx="60" cy="106" rx="42" ry="8" fill="#fff" ${SW}/>
+    <path d="M22 66 q-5 7 0 14 M98 66 q5 7 0 14" stroke="${K}" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    <path d="M30 104 L38 50 Q60 42 82 50 L90 104 Q60 110 30 104Z" fill="#ffe08a" ${SW}/>
+    <path d="M38 50 Q60 42 82 50 L83.7 61 Q78 68 72 62 Q66 69 60 62 Q54 69 48 62 Q42 68 36.3 61Z" fill="#b8682e" ${SW}/>
+    <ellipse cx="41" cy="80" rx="3" ry="9" fill="#fff" opacity=".6" transform="rotate(8 41 80)"/>
+    <path d="M60 37 C60 30 64 26 70 24" stroke="${K}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <circle cx="60" cy="41" r="7" fill="#e53950" ${SW}/><circle cx="57.5" cy="38.5" r="2" fill="#fff" opacity=".8"/>
+    ${eye(52, 82)}${eye(68, 82)}${blush(44, 92)}${blush(76, 92)}${smile(60, 92, 4)}`,
+  uzukyan: `
+    <rect x="56" y="76" width="8" height="34" rx="4" fill="#fff" ${SW}/>
+    <path d="M60 87 L46 80 L46 94Z M60 87 L74 80 L74 94Z" fill="#7ec8ff" stroke="${K}" stroke-width="2.5" stroke-linejoin="round"/>
+    <circle cx="60" cy="87" r="4" fill="#7ec8ff" stroke="${K}" stroke-width="2.5"/>
+    <circle cx="60" cy="48" r="34" fill="#fff0f7"/>
+    <path d="${spiralPath(60, 48, 3, 29, 2.6)}" stroke="#ff8cc6" stroke-width="6" fill="none" stroke-linecap="round"/>
+    <circle cx="60" cy="48" r="34" fill="none" ${SW}/>
+    <ellipse cx="44" cy="30" rx="8" ry="4" fill="#fff" opacity=".8" transform="rotate(-35 44 30)"/>
+    <ellipse cx="50" cy="54" rx="7" ry="8.5" fill="#fff0f7"/><ellipse cx="70" cy="54" rx="7" ry="8.5" fill="#fff0f7"/>
+    <ellipse cx="60" cy="64.5" rx="7" ry="4.5" fill="#fff0f7"/>
+    ${eye(50, 54)}${eye(70, 54)}${blush(41, 63)}${blush(79, 63)}${smile(60, 63, 4)}`,
+  chokoban: `
+    <ellipse cx="46" cy="110" rx="9" ry="5" fill="#5d3a1a" ${SW}/><ellipse cx="74" cy="110" rx="9" ry="5" fill="#5d3a1a" ${SW}/>
+    <rect x="30" y="16" width="60" height="64" rx="6" fill="#7b4a22" ${SW}/>
+    ${[0, 1, 2].map(i => [0, 1].map(j => `<rect x="${34 + i * 19}" y="${20 + j * 24}" width="14" height="19" rx="2.5" fill="#9a6232" stroke="#5d3a1a" stroke-width="1.5"/>`).join('')).join('')}
+    <path d="M26 72 L32 64 L38 72 L44 64 L50 72 L56 64 L62 72 L68 64 L74 72 L80 64 L86 72 L94 64 V100 Q94 108 86 108 H34 Q26 108 26 100Z" fill="#e94e5b" ${SW}/>
+    <path d="M27.5 100 H92.5" stroke="#ffd166" stroke-width="4"/>
+    ${eye(49, 84)}${eye(71, 84)}${blush(40, 93, '#ffc2c2')}${blush(80, 93, '#ffc2c2')}${smile(60, 93, 4)}`,
+  nijikuja: `
+    ${fanTail(60, 80, 52, 190, 350, ['#ff6b6b', '#ffa94d', '#ffd43b', '#8ce99a', '#63e6be', '#74c0fc', '#9775fa', '#f783ac'])}
+    <path d="M52 100 V110 M68 100 V110" stroke="#f0a030" stroke-width="4" stroke-linecap="round"/>
+    <path d="M46 111 H56 M64 111 H74" stroke="#f0a030" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M60 56 C74 56 80 70 80 84 C80 98 72 106 60 106 C48 106 40 98 40 84 C40 70 46 56 60 56Z" fill="#2fb4c8" ${SW}/>
+    <ellipse cx="60" cy="90" rx="10" ry="12" fill="#c9f2f7"/>
+    <path d="M60 37 V27 M54 39 L48 30 M66 39 L72 30" stroke="${K}" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="60" cy="25" r="3.5" fill="#ffd43b" stroke="${K}" stroke-width="1.8"/><circle cx="47" cy="28" r="3.5" fill="#ffd43b" stroke="${K}" stroke-width="1.8"/><circle cx="73" cy="28" r="3.5" fill="#ffd43b" stroke="${K}" stroke-width="1.8"/>
+    <circle cx="60" cy="52" r="16" fill="#2fb4c8" ${SW}/>
+    ${eye(54, 50, 0.75)}${eye(66, 50, 0.75)}
+    <path d="M57 56 L63 56 L60 61Z" fill="#f0a030" stroke="${K}" stroke-width="1.8" stroke-linejoin="round"/>
+    ${blush(49, 58, '#ffb3d9')}${blush(71, 58, '#ffb3d9')}
+    ${sparkle(12, 98, 5)}${sparkle(108, 100, 4)}`
 };
 
 // ===== データ =====
@@ -1132,20 +1616,47 @@ const MONS = [
   { id: 'kazanbo', no: 10, name: 'カザンボ', type: 'かざん', area: 'volcano', rar: 1, desc: 'せなかに ちいさな かざんを せおっている。びっくりすると けむりを ぽんと だす。' },
   { id: 'housekin', no: 11, name: 'ホウセキン', type: 'こうせき', area: 'volcano', rar: 2, desc: 'からだが ほうせきで できている。ひかりを あてると なないろに かがやく。' },
   { id: 'hoshipiko', no: 12, name: 'ホシピコ', type: 'ほし', area: 'volcano', rar: 3, desc: 'ながれぼしと いっしょに やってきた。5つの かどを ぴかぴかに みがいている。' },
-  { id: 'bunsuuryu', no: 13, name: 'ブンスウリュウ', type: 'でんせつ', area: 'tower', rar: 4, desc: 'ぶんすうの ちからを もつ でんせつの りゅう。どんな ものでも ぴったり おなじ 大きさに わけられる。' }
+  { id: 'bunsuuryu', no: 13, name: 'ブンスウリュウ', type: 'でんせつ', area: 'tower', rar: 4, desc: 'ぶんすうの ちからを もつ でんせつの りゅう。どんな ものでも ぴったり おなじ 大きさに わけられる。' },
+  // ---- 4年生の せかい（No.014〜） ----
+  { id: 'donguri', no: 14, name: 'ドングリン', type: 'き', area: 'forest', rar: 1, desc: 'もりで いちばん よく 見つかる。ぼうしを とられると ちょっと おこる。' },
+  { id: 'kinopon', no: 15, name: 'キノポン', type: 'きのこ', area: 'forest', rar: 1, desc: 'あめの つぎの 日に ぽこっと はえてくる。かさの もようは 1ぴきずつ ちがう。' },
+  { id: 'konohato', no: 16, name: 'コノハト', type: 'とり', area: 'forest', rar: 2, desc: 'はっぱの はねで ふわりと とぶ。きの えだに 2わ ならんで ねむる。' },
+  { id: 'hotarun', no: 17, name: 'ホタルン', type: 'むし', area: 'forest', rar: 3, desc: 'おしりの あかりで よるの もりを てらす。なかまと ひかりの あいずを おくりあう。' },
+  { id: 'kaigaran', no: 18, name: 'カイガラン', type: 'かい', area: 'beach', rar: 1, desc: 'すなはまで うまれた。うれしいと せなかの かいがらを ぱかぱか ならす。' },
+  { id: 'kanippa', no: 19, name: 'カニッパ', type: 'すなはま', area: 'beach', rar: 1, desc: 'よこあるきが とくい。はさみで パンを ぴったり はんぶんに わける。' },
+  { id: 'takorin', no: 20, name: 'タコリン', type: 'うみ', area: 'beach', rar: 2, desc: '8本の あしで たこやきを 8こ いっぺんに ひっくりかえす。はちまきが トレードマーク。' },
+  { id: 'shiofukin', no: 21, name: 'シオフキン', type: 'しぶき', area: 'beach', rar: 3, desc: 'うれしいと あたまから しおを ふく。にじが でると いっしょに うたう。' },
+  { id: 'shorton', no: 22, name: 'ショートン', type: 'おかし', area: 'sweets', rar: 1, desc: 'まるい ケーキを 8つに わけた 1こ分。なかまが 8ひき あつまると まるい ケーキに もどるらしい。' },
+  { id: 'puririn', no: 23, name: 'プリリン', type: 'ぷるぷる', area: 'sweets', rar: 1, desc: 'さわると ぷるぷる ゆれる。あたまの カラメルは すこし にがい。' },
+  { id: 'uzukyan', no: 24, name: 'ウズキャン', type: 'キャンディ', area: 'sweets', rar: 2, desc: 'からだの うずまきを 見つめると 目が まわる。なめても なくならない ふしぎな あめ。' },
+  { id: 'chokoban', no: 25, name: 'チョコバン', type: 'チョコ', area: 'sweets', rar: 3, desc: 'からだは 12この ブロック。見えているのは 6こ だから、ちょうど はんぶん かおを だしている。' },
+  { id: 'nijikuja', no: 26, name: 'ニジクジャ', type: 'でんせつ', area: 'rainbow', rar: 4, desc: '8まいの はねは どれも ぴったり おなじ 大きさ。はねを ひろげると そらに にじの はしが かかる。' }
 ];
 const MON = Object.fromEntries(MONS.map(m => [m.id, m]));
 const NEED = { 1: 2, 2: 3, 3: 4, 4: 5 };
 const RAR_W = { 1: 5, 2: 3, 3: 2, 4: 1 };
-const TYPE_COLOR = { くさ: '#3f9b45', くも: '#8a7be0', いわ: '#857c70', みず: '#2f86c9', こおり: '#2f9cc4', でんき: '#f2c230', よる: '#3d4f86', ほのお: '#e8562a', かざん: '#8d6e63', こうせき: '#8e5bd6', ほし: '#f2c230', でんせつ: '#b8860b' };
-const DARK_TEXT = new Set(['でんき', 'ほし']);
+const TYPE_COLOR = { くさ: '#3f9b45', くも: '#8a7be0', いわ: '#857c70', みず: '#2f86c9', こおり: '#2f9cc4', でんき: '#f2c230', よる: '#3d4f86', ほのお: '#e8562a', かざん: '#8d6e63', こうせき: '#8e5bd6', ほし: '#f2c230', でんせつ: '#b8860b',
+  き: '#8d5a32', きのこ: '#d84343', とり: '#f2a93b', むし: '#5c8a2e', かい: '#e0703a', すなはま: '#e2b65c', うみ: '#1f6fb2', しぶき: '#2f9cc4',
+  おかし: '#d9547f', ぷるぷる: '#f5c84c', キャンディ: '#e0569a', チョコ: '#6d4521' };
+const DARK_TEXT = new Set(['でんき', 'ほし', 'とり', 'すなはま', 'ぷるぷる']);
 const UNLOCK = 9;
+// 4年生 → 5年生 の じゅんに ならべる（ステージ番号も この じゅん）
 const AREAS = [
-  { id: 'meadow', name: 'はじまりのそうげん', lv: 1, lvName: 'かんたん', topics: ['equiv', 'reduce', 'divfrac'], pad: '#79c257' },
-  { id: 'lake', name: 'しずくのみずうみ', lv: 2, lvName: 'ふつう', topics: ['common', 'compare', 'add', 'sub'], pad: '#b7de95' },
-  { id: 'volcano', name: 'ほのおのやま', lv: 3, lvName: 'むずかしい', topics: ['madd', 'msub', 'decimal', 'three'], pad: '#b97b52' },
-  { id: 'tower', name: 'ほしぞらのとう', lv: 4, lvName: 'でんせつ', topics: ['reduce', 'common', 'add', 'sub', 'madd', 'msub', 'decimal', 'three'], pad: '#5258a8', unlock: UNLOCK }
+  { id: 'forest', grade: 4, name: 'こもれびのもり', lv: 1, lvName: 'かんたん', topics: ['tape', 'unit', 'kinds', 'cmp4'], pad: '#6fbf5a' },
+  { id: 'beach', grade: 4, name: 'さざなみのはま', lv: 2, lvName: 'ふつう', topics: ['toMixed', 'toImp', 'cmpMix', 'same4'], pad: '#f2d28f' },
+  { id: 'sweets', grade: 4, name: 'おかしのまち', lv: 3, lvName: 'むずかしい', topics: ['add4', 'sub4', 'madd4', 'msub4'], pad: '#f7b6d2' },
+  { id: 'rainbow', grade: 4, name: 'にじのかけはし', lv: 4, lvName: 'でんせつ', topics: ['unit', 'toMixed', 'toImp', 'cmpMix', 'same4', 'add4', 'sub4', 'madd4', 'msub4'], pad: '#c9b6ff', unlock: UNLOCK, mix: '4年生の もんだいが まざって でる' },
+  { id: 'meadow', grade: 5, name: 'はじまりのそうげん', lv: 1, lvName: 'かんたん', topics: ['equiv', 'reduce', 'divfrac'], pad: '#79c257' },
+  { id: 'lake', grade: 5, name: 'しずくのみずうみ', lv: 2, lvName: 'ふつう', topics: ['common', 'compare', 'add', 'sub'], pad: '#b7de95' },
+  { id: 'volcano', grade: 5, name: 'ほのおのやま', lv: 3, lvName: 'むずかしい', topics: ['madd', 'msub', 'decimal', 'three'], pad: '#b97b52' },
+  { id: 'tower', grade: 5, name: 'ほしぞらのとう', lv: 4, lvName: 'でんせつ', topics: ['reduce', 'common', 'add', 'sub', 'madd', 'msub', 'decimal', 'three'], pad: '#5258a8', unlock: UNLOCK, mix: '5年生の もんだいが まざって でる' }
 ];
+const AREA = Object.fromEntries(AREAS.map(a => [a.id, a]));
+const GRADES = [
+  { grade: 4, title: '4年生の ふくしゅう', sub: '4年生で ならった 分数を おさらいしよう' },
+  { grade: 5, title: '5年生の ぼうけん', sub: '5年生で ならう 分数に チャレンジ！' }
+];
+const gradeOf = m => AREA[m.area].grade;
 
 // ===== 背景 =====
 const DECOR = (() => {
@@ -1155,7 +1666,45 @@ const DECOR = (() => {
   for (let i = 0; i < 46; i++) stars += `<circle cx="${(rnd() * 400).toFixed(0)}" cy="${(rnd() * 130).toFixed(0)}" r="${(0.8 + rnd() * 1.6).toFixed(1)}" fill="#fff" opacity="${(0.5 + rnd() * 0.5).toFixed(2)}"/>`;
   const flower = (x, y) => `<circle cx="${x}" cy="${y}" r="4.5" fill="#fff"/><circle cx="${x}" cy="${y}" r="1.8" fill="#ffc933"/>`;
   const tuft = (x, y) => `<path d="M${x} ${y} l4 -11 2 11 3 -8 2 8" stroke="#5fae55" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+  const shroom = (x, y, s = 1) => `<g transform="translate(${x} ${y}) scale(${s})"><rect x="-3" y="-2" width="6" height="10" rx="2" fill="#fff4dc"/><path d="M-9 0 a9 8 0 0 1 18 0Z" fill="#e84a4a"/><circle cx="-3" cy="-4" r="1.6" fill="#fff"/><circle cx="3" cy="-3" r="1.2" fill="#fff"/></g>`;
+  const cakeHouse = (x, y) => `<g transform="translate(${x} ${y})"><rect y="10" width="58" height="54" rx="6" fill="#ffe2a8"/><path d="M0 18 V12 Q0 4 8 4 H50 Q58 4 58 12 V18 Q54 24 48 18 Q42 24 36 18 Q30 24 24 18 Q18 24 12 18 Q6 24 0 18Z" fill="#fff"/><rect x="21" y="38" width="16" height="26" rx="8" fill="#b8682e"/><circle cx="12" cy="32" r="5" fill="#bfe6ff"/><circle cx="46" cy="32" r="5" fill="#bfe6ff"/><circle cx="29" cy="0" r="7" fill="#ff4d5e"/></g>`;
+  const lolli = (x, y) => `<rect x="${x - 2.5}" y="${y}" width="5" height="46" rx="2.5" fill="#fff"/><circle cx="${x}" cy="${y}" r="17" fill="#fff"/><path d="${spiralPath(x, y, 2, 15, 2.2, 60)}" stroke="#7ec8ff" stroke-width="4" fill="none" stroke-linecap="round"/>`;
+  const cloud = (x, y, s) => `<g fill="#fff" transform="translate(${x} ${y}) scale(${s})"><circle cx="-16" cy="4" r="12"/><circle cx="0" cy="-4" r="16"/><circle cx="18" cy="4" r="12"/><rect x="-28" y="4" width="58" height="12" rx="6"/></g>`;
+  const twinkle = (x, y, r) => `<path d="${starPath(x, y, r, r * 0.35, 4)}" fill="#fff"/>`;
+  const sprinkles = [[40, 168, '#ff6fae', 20], [90, 186, '#7ec8ff', -30], [150, 164, '#ffd43b', 60], [232, 190, '#8ce99a', 10], [282, 170, '#ff6fae', -50], [352, 184, '#9775fa', 30], [196, 172, '#7ec8ff', 80]]
+    .map(([x, y, c, r]) => `<rect x="${x - 5}" y="${y - 2}" width="10" height="4" rx="2" fill="${c}" transform="rotate(${r} ${x} ${y})"/>`).join('');
   return {
+    forest: wrap(`<rect width="400" height="200" fill="#e3f5cf"/>
+      <g fill="#fffbe0" opacity=".7"><polygon points="150,0 182,0 250,200 205,200"/><polygon points="262,0 276,0 322,200 298,200"/></g>
+      <g fill="#8d6e63"><rect x="26" y="40" width="16" height="110"/><rect x="352" y="30" width="18" height="120"/><rect x="108" y="76" width="9" height="64"/><rect x="290" y="80" width="9" height="60"/></g>
+      <g fill="#5fae55"><circle cx="16" cy="26" r="40"/><circle cx="62" cy="16" r="32"/><circle cx="362" cy="20" r="40"/><circle cx="398" cy="52" r="30"/></g>
+      <g fill="#86c96b"><circle cx="112" cy="66" r="22"/><circle cx="294" cy="70" r="20"/></g>
+      <path d="M0 138 Q200 118 400 138 V200 H0Z" fill="#a4d685"/>
+      <path d="M0 164 Q200 150 400 164 V200 H0Z" fill="#86c66a"/>
+      ${shroom(64, 168)}${shroom(338, 176)}${shroom(354, 170, 0.7)}
+      <g fill="#7fd15a"><ellipse cx="180" cy="40" rx="5" ry="2.5" transform="rotate(30 180 40)"/><ellipse cx="232" cy="70" rx="5" ry="2.5" transform="rotate(-20 232 70)"/><ellipse cx="140" cy="102" rx="5" ry="2.5" transform="rotate(50 140 102)"/></g>`),
+    beach: wrap(`<rect width="400" height="200" fill="#cdeffd"/><circle cx="66" cy="42" r="22" fill="#fff1a1"/>
+      <g fill="#fff" opacity=".9"><circle cx="262" cy="34" r="10"/><circle cx="277" cy="28" r="13"/><circle cx="293" cy="35" r="9"/></g>
+      <rect y="92" width="400" height="60" fill="#4fc3e8"/>
+      <g stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none" opacity=".75"><path d="M36 108 q10 -6 20 0 t20 0"/><path d="M246 104 q10 -6 20 0 t20 0"/><path d="M146 120 q10 -6 20 0 t20 0"/><path d="M318 124 q10 -6 20 0"/></g>
+      <path d="M0 140 Q50 130 100 138 T200 136 T300 138 T400 136 V200 H0Z" fill="#fff" opacity=".85"/>
+      <path d="M0 146 Q200 134 400 146 V200 H0Z" fill="#ffe3a3"/>
+      <path d="M352 150 Q356 112 372 76" stroke="#a1887f" stroke-width="9" fill="none" stroke-linecap="round"/>
+      <g fill="#5fae55"><path d="M372 76 Q350 60 326 72 Q350 68 372 80Z"/><path d="M372 76 Q392 58 414 70 Q392 68 372 80Z"/><path d="M372 76 Q366 50 344 44 Q362 58 370 80Z"/><path d="M372 76 Q384 50 406 46 Q386 60 374 80Z"/></g>
+      <path d="${starPath(48, 172, 9, 4)}" fill="#ff9f7a"/>
+      <path d="M300 182 l-10 -14 a12 12 0 0 1 20 0Z" fill="#ffb37a"/>
+      <g fill="#e8c685"><circle cx="120" cy="168" r="2"/><circle cx="210" cy="186" r="2"/><circle cx="260" cy="164" r="1.6"/></g>`),
+    sweets: wrap(`<rect width="400" height="200" fill="#ffe6f2"/>
+      <g fill="#fff" opacity=".8"><circle cx="300" cy="34" r="10"/><circle cx="315" cy="28" r="13"/><circle cx="331" cy="35" r="9"/></g>
+      <path d="M0 118 Q50 84 100 114 T200 108 T300 112 T400 104 V200 H0Z" fill="#ffc6de"/>
+      ${cakeHouse(26, 74)}${cakeHouse(316, 80)}${lolli(120, 96)}${lolli(282, 100)}
+      <path d="M0 146 Q200 130 400 146 V200 H0Z" fill="#fff3c4"/>
+      ${sprinkles}`),
+    rainbow: wrap(`<rect width="400" height="200" fill="#c8e7ff"/>
+      <g fill="none" stroke-width="11" opacity=".9">${['#ff6b6b', '#ffa94d', '#ffd43b', '#8ce99a', '#74c0fc', '#9775fa'].map((c, i) => `<path d="M${30 + i * 11} 170 A${170 - i * 11} ${150 - i * 11} 0 0 1 ${370 - i * 11} 170" stroke="${c}"/>`).join('')}</g>
+      ${cloud(40, 150, 1.3)}${cloud(360, 150, 1.3)}${cloud(120, 40, 0.8)}${cloud(300, 30, 0.7)}
+      ${twinkle(80, 82, 6)}${twinkle(330, 92, 5)}${twinkle(200, 16, 5)}
+      <path d="M0 160 Q40 146 80 160 Q120 146 160 160 Q200 146 240 160 Q280 146 320 160 Q360 146 400 160 V200 H0Z" fill="#fff"/>`),
     meadow: wrap(`<rect width="400" height="200" fill="#c6ecff"/><circle cx="338" cy="42" r="24" fill="#fff1a1"/>
       <g fill="#fff"><circle cx="78" cy="46" r="14"/><circle cx="97" cy="38" r="19"/><circle cx="118" cy="47" r="13"/><rect x="78" y="44" width="40" height="17" rx="6"/></g>
       <g fill="#fff" opacity=".9"><circle cx="240" cy="30" r="9"/><circle cx="252" cy="25" r="12"/><circle cx="266" cy="31" r="8"/></g>
@@ -1215,7 +1764,9 @@ function loadSave() {
 }
 function persist() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(save)); } catch (e) { /* 保存できない環境 */ } }
 const caughtKinds = f => MONS.filter(m => (save.caught[m.id] || 0) > 0 && (!f || f(m))).length;
-const normalCaught = () => caughtKinds(m => m.rar < 4);
+// でんせつの ステージは、おなじ 学年の ふつうの モンスターを あつめると ひらく
+const normalCaught = g => caughtKinds(m => m.rar < 4 && gradeOf(m) === g);
+const gradeDone = g => MONS.filter(m => gradeOf(m) === g).every(m => save.caught[m.id]);
 
 // ===== 画面 =====
 const $ = id => document.getElementById(id);
@@ -1234,25 +1785,35 @@ function miniIcon(m) {
   return `<span class="mini" aria-label="まだ 見つけていない">？</span>`;
 }
 
+function areaCard(a, no) {
+  const mons = MONS.filter(m => m.area === a.id);
+  const n = normalCaught(a.grade);
+  const locked = a.unlock && n < a.unlock;
+  const got = mons.filter(m => save.caught[m.id]).length;
+  const topics = a.mix || a.topics.map(t => TOPICS[t]).join('・');
+  return `<article class="area${locked ? ' locked' : ''}">
+    <div class="area-art">${DECOR[a.id]}${locked ? `<div class="lock-tag"><span>${LOCK}ロック中</span></div>` : ''}<span class="stage-no">ステージ${no}</span></div>
+    <div class="area-body">
+      <h4 class="area-name">${a.name}<span class="lv" data-lv="${a.lv}">${a.lvName}</span></h4>
+      <p class="area-topics">${topics}</p>
+      <div class="area-mons">${mons.map(miniIcon).join('')}</div>
+      <div class="area-foot"><span class="got">つかまえた ${got}/${mons.length}</span>${locked
+        ? `<span class="lock-note">${a.grade}年生の モンスターを あと ${a.unlock - n}しゅるい つかまえると ひらく</span>`
+        : `<button class="btn primary" data-area="${a.id}">ここで さがす</button>`}</div>
+    </div></article>`;
+}
+
 function renderHome() {
   $('zukan-count').textContent = `${caughtKinds()}/${MONS.length}`;
   updateAudioUI();
-  const n = normalCaught();
-  $('areas').innerHTML = AREAS.map(a => {
-    const mons = MONS.filter(m => m.area === a.id);
-    const locked = a.unlock && n < a.unlock;
-    const got = mons.filter(m => save.caught[m.id]).length;
-    const topics = a.id === 'tower' ? 'これまでの もんだいが まざって でる' : a.topics.map(t => TOPICS[t]).join('・');
-    return `<article class="area${locked ? ' locked' : ''}">
-      <div class="area-art">${DECOR[a.id]}${locked ? `<div class="lock-tag"><span>${LOCK}ロック中</span></div>` : ''}</div>
-      <div class="area-body">
-        <h3 class="area-name">${a.name}<span class="lv" data-lv="${a.lv}">${a.lvName}</span></h3>
-        <p class="area-topics">${topics}</p>
-        <div class="area-mons">${mons.map(miniIcon).join('')}</div>
-        <div class="area-foot"><span class="got">つかまえた ${got}/${mons.length}</span>${locked
-          ? `<span class="lock-note">あと ${a.unlock - n}しゅるい つかまえると ひらく</span>`
-          : `<button class="btn primary" data-area="${a.id}">ここで さがす</button>`}</div>
-      </div></article>`;
+  let no = 0;
+  $('areas').innerHTML = GRADES.map(g => {
+    const list = AREAS.filter(a => a.grade === g.grade);
+    return `<section class="grade">
+      <h3 class="grade-title">${g.title}<span class="grade-badge">ステージ${no + 1}〜${no + list.length}</span></h3>
+      <p class="grade-sub">${g.sub}</p>
+      <div class="areas">${list.map(a => areaCard(a, ++no)).join('')}</div>
+    </section>`;
   }).join('');
 }
 
@@ -1308,7 +1869,7 @@ function nextQuestion() {
   B.q = Q[t]();
   B.locked = false;
   const q = B.q;
-  $('q-topic').textContent = TOPICS[q.topic];
+  $('q-topic').textContent = topicName(q.topic);
   $('q-hint').hidden = true;
   $('q-hint').innerHTML = q.hint;
   $('q-label').textContent = q.label;
@@ -1392,14 +1953,17 @@ async function capture() {
   }).join('');
   if (!Music.jingle('victory')) Snd.play('get');
   const first = !save.caught[mon.id];
-  const beforeNormal = normalCaught();
+  const grade = gradeOf(mon);
+  const beforeNormal = normalCaught(grade);
   save.caught[mon.id] = (save.caught[mon.id] || 0) + 1; persist();
   setMsg(`やった！ ${mon.name}を つかまえた！`);
   await sleep(800);
   if (B !== me) return;
   let notice = '';
+  const opened = AREAS.find(a => a.unlock && a.grade === grade && beforeNormal < a.unlock && normalCaught(grade) >= a.unlock);
   if (caughtKinds() === MONS.length && first) notice = 'ずかん コンプリート！ おめでとう！ 分数マスターだ！';
-  else if (beforeNormal < UNLOCK && normalCaught() >= UNLOCK) notice = '「ほしぞらのとう」への みちが ひらいた！';
+  else if (opened) notice = `「${opened.name}」への みちが ひらいた！`;
+  else if (first && gradeDone(grade)) notice = `${grade}年生の モンスターを ぜんぶ つかまえた！`;
   openModal(`
     <p class="get-title">ゲット！</p>
     ${first ? '<span class="new-badge">NEW！ ずかんに とうろく</span>' : ''}
@@ -1444,22 +2008,25 @@ function closeModal() { $('modal').hidden = true; $('modal-card').innerHTML = ''
 // ===== ずかん =====
 function renderZukan() {
   $('zk-count').textContent = `${caughtKinds()} / ${MONS.length}`;
-  $('zk-grid').innerHTML = MONS.map(m => {
+  const card = m => {
     const c = save.caught[m.id] || 0;
     if (c) return `<button class="zk-card" data-id="${m.id}"><span class="no">No.${pad3(m.no)}</span>${monSVG(m.id)}<span class="nm">${m.name}</span><span class="ct">つかまえた ${c}かい</span></button>`;
-    const areaName = AREAS.find(a => a.id === m.area).name;
     if (save.seen[m.id]) return `<div class="zk-card unknown sil"><span class="no">No.${pad3(m.no)}</span>${monSVG(m.id)}<span class="nm">${m.name}</span><span class="ct">見つけた（まだ つかまえて いない）</span></div>`;
-    return `<div class="zk-card unknown"><span class="no">No.${pad3(m.no)}</span><div class="q-mark">？</div><span class="nm">？？？</span><span class="ct">${areaName}に いるらしい</span></div>`;
+    return `<div class="zk-card unknown"><span class="no">No.${pad3(m.no)}</span><div class="q-mark">？</div><span class="nm">？？？</span><span class="ct">${AREA[m.area].name}に いるらしい</span></div>`;
+  };
+  $('zk-grid').innerHTML = GRADES.map(g => {
+    const list = MONS.filter(m => gradeOf(m) === g.grade).sort((x, y) => x.no - y.no);
+    return `<h3 class="zk-sec">${g.grade}年生の モンスター<span>${list.filter(m => save.caught[m.id]).length}/${list.length}</span></h3>${list.map(card).join('')}`;
   }).join('');
   let C = 0, T = 0;
-  const rows = Object.keys(TOPICS).map(t => {
+  const row = t => {
     const s = save.stats[t] || { c: 0, t: 0 };
     C += s.c; T += s.t;
     const pct = s.t ? Math.round(s.c / s.t * 100) : 0;
     return `<div class="rec-row"><span>${TOPICS[t]}</span><span class="rec-bar"><i class="${pct < 50 ? 'low' : pct < 80 ? 'mid' : ''}" style="width:${pct}%"></i></span><span class="rec-num">${s.t ? `${s.c}/${s.t}` : 'まだ'}</span></div>`;
-  });
+  };
+  $('rec-list').innerHTML = TOPIC_GROUPS.map(g => `<p class="rec-grade">${g.grade}年生</p>${g.keys.map(row).join('')}`).join('');
   $('rec-total').textContent = T ? `こたえた もんだい ${T}もん・せいかい ${C}もん（${Math.round(C / T * 100)}%）` : 'まだ もんだいに こたえて いないよ。';
-  $('rec-list').innerHTML = rows.join('');
   renderReset(false);
 }
 function renderReset(confirming) {
